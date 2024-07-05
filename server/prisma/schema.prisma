@@ -12,3 +12,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  full_name String
+  password String
+  createdAt DateTime @default(now())
+  balance Int @default(0)
+  token Int @default(100)
+  highest_score Int @default(0)
+  scores Score[]
+
+}
+
+model Score{
+  id String @id @default(uuid())
+  score Int 
+  createdAt DateTime @default(now())
+  userid String
+  user User @relation(fields: [userid], references: [id])
+}
+
+
