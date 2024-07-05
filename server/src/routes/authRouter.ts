@@ -66,7 +66,7 @@ authRouter.post('/signup', async(c)=>{
                 full_name: body.full_name
             }
         })
-
+       //@ts-ignore
         const token = await sign(user.id , c.env.JWT_SECRET)
         console.log(user)
 
@@ -115,7 +115,7 @@ authRouter.post('/signin', async(c)=>{
         if(!existuser){
             return c.json({msg: "user dont exist"})
         }
-
+         //@ts-ignore
         const token = await sign(existuser.id, c.env.JWT_SECRET)
 
         setCookie(c,"token", token)
