@@ -76,8 +76,41 @@ gameRouter.get('/bulk', async(c)=>{
 
 gameRouter.post('/startgame', async(c)=>{
 
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+
     const userID = c.get("userID")
     console.log(userID)
-    return c.text("game page")
+
+    const validbalanceuser = await prisma.user.findUnique({
+        where:{
+            id: userID
+        }
+    })
+    if(!validbalanceuser||  validbalanceuser?.token <= 0){
+        return c.json({msg: "insufficient token "})
+    }
+
+    const user = await prisma.user.update({
+        where: {
+            id: userID,
+        },
+        data:{
+            token: {
+                decrement: 5
+            }
+        }
+    })
+
+ 
+
+    const userinfo = {fullname: user.full_name, token: user.token}
+
+
+
+
+
+    return c.json({msg:"game page", userinfo})
 
 })
