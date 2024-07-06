@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
-import { Payload } from "@prisma/client/runtime/library";
 
 
 
@@ -147,3 +146,60 @@ gameRouter.get('/token_balance', async(c)=>{
 
 })
 
+
+gameRouter.post('/gameover', async(c)=>{
+
+     const prisma = new PrismaClient({
+       datasourceUrl: c.env.DATABASE_URL,
+     }).$extends(withAccelerate());
+
+
+    const id = c.get("userID")
+
+    try {
+        const score = await c.req.json()
+        const gamescore = await prisma.score.create({
+            //@ts-ignore
+            data:{
+                score: score,
+                userid: id
+
+            }
+        })
+
+        const maxscore = await prisma.score.aggregate({
+            where:{
+                userid: id,
+                
+            },
+            _max: {
+                score: true
+            
+            }
+        })
+
+        console.log(maxscore,gamescore)
+
+        const highest_score = await prisma.user.update({
+            where:{
+                id: id
+            },
+            data:{
+                // so if no score found just putting 0 for now
+                highest_score: maxscore._max.score || 0
+            }
+        })
+
+        console.log(highest_score)
+
+        return c.json({highest_score, msg: "gameoverpg working"})
+
+        
+    } catch (error) {
+        console.log(error)
+        return c.json({msg: "error while gameover"})
+        
+    }
+
+
+})
