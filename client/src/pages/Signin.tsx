@@ -1,9 +1,29 @@
-import React from 'react'
+
+import { useState } from 'react';
 import Meteors from '../components/ui/bg';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BackendUrl } from '../config';
 
 export default function Signin() {
     const navigate = useNavigate()
+    const [signIninputs, setsignIninputs] = useState({email:"", password:""})
+
+
+    const handleSubmit = async (e: any) => {
+      e.preventDefault();
+      const res = await axios.post(`${BackendUrl}/auth/signin`, {
+        email: signIninputs.email,
+        password: signIninputs.password,
+      });
+  
+
+      if(res.status === 200){
+        navigate('/')
+      }else{
+        console.log(res.data)
+      }
+    };
   return (
     <div className="relative flex items-center justify-center h-screen bg-black p-20 overflow-hidden">
       <Meteors number={30} />
@@ -14,7 +34,7 @@ export default function Signin() {
             <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
               Welcome Degens
             </h1>
-            <form className="space-y-4 md:space-y-6 " action="#">
+            <form className="space-y-4 md:space-y-6 " onSubmit={handleSubmit}>
               <div>
                 <label className="block mb-2 text-sm font-medium  text-white">
                   Your email
@@ -25,6 +45,7 @@ export default function Signin() {
                   id="email"
                   className="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 text-white dark:border-gray-600"
                   placeholder="name@company.com"
+                  onChange={(e : React.ChangeEvent<HTMLInputElement>) => setsignIninputs((c) => ({...c, email: e.target.value})) }
                 />
               </div>
               <div>
@@ -37,6 +58,7 @@ export default function Signin() {
                   id="password"
                   placeholder="••••••••"
                   className="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 text-white dark:border-gray-600"
+                  onChange={(e : React.ChangeEvent<HTMLInputElement>) => setsignIninputs((c) => ({...c, password: e.target.value})) }
                 />
               </div>
 

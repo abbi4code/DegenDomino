@@ -107,6 +107,7 @@ authRouter.post('/signin', async(c)=>{
         const validuser = signinInputs.safeParse(body)
         if(!validuser.success){
             const msg = validuser.error.errors.map((err)=> err.message)
+            c.status(404)
             return c.json({msg})
         }
 
@@ -116,6 +117,7 @@ authRouter.post('/signin', async(c)=>{
             }
         })
         if(!existuser){
+            c.status(404)
             return c.json({msg: "user dont exist"})
         }
          //@ts-ignore
@@ -126,6 +128,7 @@ authRouter.post('/signin', async(c)=>{
     sameSite: "Lax",
     maxAge: 2000,
   });
+  c.status(200)
 
         return c.json({msg: "user signin successfully", token,existuser})
 

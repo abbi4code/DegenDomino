@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 const Signup = () => {
   const navigate = useNavigate()
   const [inputs, setinputs] = useState({email: "", full_name:"", password:""})
-const handleSubmit = async (e) => {
+const handleSubmit = async (e : any) => {
   e.preventDefault();
   try {
     const res = await axios.post(
