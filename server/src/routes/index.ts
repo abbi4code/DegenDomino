@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { authRouter } from "./authRouter";
 import { gameRouter } from "./gameRouter";
+import { adminRouter } from "./adminRouter";
 
 export const parentRoute = new Hono<{
     Bindings:{
@@ -9,7 +10,7 @@ export const parentRoute = new Hono<{
     }
 }>()
 
-
+parentRoute.route('/admin',adminRouter )
 parentRoute.route('/auth',authRouter)
 parentRoute.route('/game', gameRouter)
 
