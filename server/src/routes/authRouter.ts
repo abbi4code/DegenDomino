@@ -46,6 +46,7 @@ authRouter.post('/signup', async(c)=>{
         const validuser = signupInputs.safeParse(body)
         if(!validuser.success){
             const msg = validuser.error.errors.map((err) => err.message)
+            c.status(404)
             return c.json({msg})
         }
         const existuser = await prisma.user.findUnique({
@@ -54,6 +55,7 @@ authRouter.post('/signup', async(c)=>{
             }
         })
         if(existuser){
+            c.status(404)
             return c.json({msg: "user already exist"})
 
         }
@@ -70,7 +72,8 @@ authRouter.post('/signup', async(c)=>{
         const token = await sign(user.id , c.env.JWT_SECRET)
         console.log(user)
 
-        setCookie(c, "token", token)
+        setCookie(c, "token", token,{httpOnly: true,sameSite: "Lax",maxAge: 2000})
+        c.status(200)
 
         return c.json({msg: "user succesfully signup", token,user})
 
@@ -118,7 +121,11 @@ authRouter.post('/signin', async(c)=>{
          //@ts-ignore
         const token = await sign(existuser.id, c.env.JWT_SECRET)
 
-        setCookie(c,"token", token)
+  setCookie(c, "token", token, {
+    httpOnly: true,
+    sameSite: "Lax",
+    maxAge: 2000,
+  });
 
         return c.json({msg: "user signin successfully", token,existuser})
 
@@ -148,4 +155,7 @@ authRouter.post('/logout', async(c)=>{
     
    }
 })
+
+
+
 

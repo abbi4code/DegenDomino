@@ -3,6 +3,7 @@ import { authRouter } from "./authRouter";
 import { gameRouter } from "./gameRouter";
 import { adminRouter } from "./adminRouter";
 
+
 export const parentRoute = new Hono<{
     Bindings:{
         DATABASE_URL: String,
@@ -18,3 +19,4 @@ parentRoute.route('/game', gameRouter)
 parentRoute.get('/', async(c)=>{
     return c.text("hi there")
 })
+
