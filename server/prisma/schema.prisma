@@ -24,6 +24,7 @@ model User {
   token Int @default(100)
   highest_score Int @default(0)
   scores Score[]
+  games Game[]
 
 }
 
@@ -33,6 +34,31 @@ model Score{
   createdAt DateTime @default(now())
   userid String
   user User @relation(fields: [userid], references: [id])
+  gameid String
+  game Game @relation(fields: [gameid] , references: [id])
+
 }
 
+model Game{
+  id String @id @default(uuid())
+  title String @unique
+  description String
+  createdAt DateTime
+  tokenreq Int @default(5)
+  userid String
+  user User @relation(fields: [userid], references: [id])
+  scores Score[]
+  adminid String
+  admin Admin @relation(fields: [adminid], references: [id])
+
+
+}
+
+
+model Admin {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  games Game[]
+}
 
