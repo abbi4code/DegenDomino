@@ -25,8 +25,10 @@ adminRouter.post('/signin',async(c)=>{
             }
         })
         if(!admin){
-            return c.json({msg: "admin with this email not exist"})
+            c.status(404)
+            return c.json({msg: "admin with this email/password not exist"})
         }
+        c.status(200)
 
         return c.json({msg: "admin successfully signin"})
         

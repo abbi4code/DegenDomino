@@ -10,6 +10,8 @@ import Home from './pages/Home'
 import Game from './pages/Game'
 import GameOver from './pages/GameOver'
 import StartGame from './pages/StartGame'
+import Admin from './admin/admin'
+import PostGames from './admin/PostGames'
 
 function App() {
 
@@ -26,6 +28,8 @@ function App() {
       <Route path='/game' element={<Game/>}/>
       <Route path='/gameover' element={<GameOver/>}/>
       <Route path='/startgame' element={<StartGame/>}/>
+      <Route path='/admin' element={<Admin/>}/>
+      <Route path='/postgames' element={<PostGames/>}/>
     </Routes>
     </BrowserRouter>
       
