@@ -2,12 +2,17 @@
 import { TextGenerateEffect } from "../components/aceui/textani";
 import { CardBody, CardContainer, CardItem } from "../components/aceui/Card";
 import applebg from "../assets/applebgpng-removebg-preview.png"
-
+import { useNavigate } from "react-router-dom";
 
 
 
 
 export default function Games() {
+  const navigate = useNavigate()
+
+  const handleClick = ()=>{
+    navigate('/startgame')
+  }
   return (
     <div className="max-h-screen w-full">
       <div className="relative h-full w-full bg-black">
@@ -20,7 +25,8 @@ export default function Games() {
             />
             <div className="flex ">
               <CardContainer className="inter-var flex flex-col items-center justify-center">
-                <CardBody className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-max sm:w-[30rem] h-auto rounded-xl p-6 border  ">
+                {/* <-------for now only apple game added------> {maybe later i will add more} */}
+                <CardBody className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-max sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  " onClick={handleClick}>
                   <CardItem
                     translateZ="50"
                     className="text-xl font-bold text-neutral-600 dark:text-white"

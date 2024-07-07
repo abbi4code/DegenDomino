@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Game.css"
+import "./Game.css";
 import Phaser from "phaser";
-import bg from "../assets/bg.png"
-import basket from "../assets/basket.png"
-import apple from "../assets/apple.png"
+import bg from "../assets/bg.png";
+import basket from "../assets/basket.png";
+import apple from "../assets/apple.png";
+
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 };
 
 const Game = () => {
-   const navigate = useNavigate()
+  const navigate = useNavigate();
   const gameRef = useRef<Phaser.Game | null>(null);
   const [points, setPoints] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(5);
+  const [remainingTime, setRemainingTime] = useState(5)
 
   useEffect(() => {
     const speedDown = 800;
@@ -28,8 +29,13 @@ const Game = () => {
       textTime: Phaser.GameObjects.Text;
       timedEvent: Phaser.Time.TimerEvent;
       remainingTime: number;
-      textScore: Phaser.GameObjects.Text = {} as Phaser.GameObjects.Text;
+      textScore: Phaser.GameObjects.Text;
       isGameOver: boolean;
+      navigate: Function;
+
+      init(data: any) {
+        this.navigate = data.navigate;
+      }
 
       constructor() {
         super({ key: "scene-game" });
@@ -41,20 +47,19 @@ const Game = () => {
         this.points = 0;
         this.textTime = {} as Phaser.GameObjects.Text;
         this.timedEvent = {} as Phaser.Time.TimerEvent;
-        this.remainingTime = 5;
+        this.remainingTime = 5
+        this.textScore = {} as Phaser.GameObjects.Text;
         this.isGameOver = false;
+        this.navigate = () => {};
       }
 
       preload() {
-        this.load.image("bg",bg)
+        this.load.image("bg", bg);
         this.load.image("basket", basket);
         this.load.image("apple", apple);
       }
 
       create() {
-        // this.scene.pause("scene-game");
-
-        //this.add.image(0, 0, "bg").setOrigin(0, 0);
         const background = this.add.image(0, 0, "bg").setOrigin(0, 0);
         background.setScale(
           sizes.width / background.width,
@@ -78,7 +83,6 @@ const Game = () => {
             this.player.height - this.player.height / 10
           );
 
-       
         if (this.input && this.input.keyboard) {
           this.cursor = this.input.keyboard.createCursorKeys();
         }
@@ -86,7 +90,6 @@ const Game = () => {
         this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
         this.target.setMaxVelocity(100, speedDown);
 
-       
         this.physics.add.overlap(
           this.target,
           this.player,
@@ -99,7 +102,7 @@ const Game = () => {
           font: "25px Arial",
           color: "#000000",
         });
-        this.textTime = this.add.text(10, 10, "Remaining Time: 00:60", {
+        this.textTime = this.add.text(10, 10, "Remaining Time: 01:00", {
           font: "25px verdana",
           color: "#000000",
         });
@@ -111,13 +114,11 @@ const Game = () => {
           loop: true,
         });
 
-      
         this.input.on("pointermove", this.handleTouchMove, this);
       }
 
       handleTouchMove(pointer: Phaser.Input.Pointer) {
         if (!this.isGameOver) {
-          
           const touchX = pointer.x;
           const playerX = this.player.x + this.player.width / 2;
 
@@ -181,19 +182,23 @@ const Game = () => {
       }
 
       gameOver() {
-        if (this.points >= 45) {
-          gameEndScoreSpan.textContent = this.points.toString();
-          gameWinLoseSpan.textContent = "Win! :>";
-        } else {
-          gameEndScoreSpan.textContent = this.points.toString();
-          gameWinLoseSpan.textContent = "Lose! :<";
+        const gameEndScoreSpan = document.getElementById("gameEndScoreSpan");
+        const gameWinLoseSpan = document.getElementById("gameWinLoseSpan");
+
+        if (gameEndScoreSpan && gameWinLoseSpan) {
+          if (this.points >= 45) {
+            gameEndScoreSpan.textContent = this.points.toString();
+            gameWinLoseSpan.textContent = "Win! :>";
+          } else {
+            gameEndScoreSpan.textContent = this.points.toString();
+            gameWinLoseSpan.textContent = "Lose! :<";
+          }
         }
+
+        this.navigate("/gameover"); // Use navigate function
         this.isGameOver = true;
 
-        gameEndDiv.style.display = "flex";
-        navigate('/gameover')
         this.scene.stop();
-
       }
     }
 
@@ -209,44 +214,26 @@ const Game = () => {
         },
       },
       scene: [GameScene],
-    //   scale: {
-    //     mode: Phaser.Scale.FIT,
-    //     autoCenter: Phaser.Scale.CENTER_BOTH,
-    //   },
     };
-   //@ts-ignore
+
     gameRef.current = new Phaser.Game(config);
-
-    const gameStartBtn = document.getElementById("gameStartBtn");
-    const gameStartDiv = document.getElementById("gameStartDiv");
-    const gameEndDiv = document.getElementById("gameEndDiv")!;
-    const gameWinLoseSpan = document.getElementById("gameWinLoseSpan")!;
-    const gameEndScoreSpan = document.getElementById("gameEndScoreSpan")!;
-    if (gameRef.current) {
-      gameRef.current.scene.resume("scene-game");
-    }
-
-    // if (gameStartBtn) {
-    //   gameStartBtn.addEventListener("click", () => {
-    //     if (gameStartDiv) {
-    //       gameStartDiv.style.display = "none";
-    //     }
-        
-    //   });
-    // }
+    gameRef.current.scene.start("scene-game", { navigate });
 
     return () => {
       if (gameRef.current) {
         gameRef.current.destroy(true);
       }
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <>
       <main>
-        <canvas id="gameCanvas" className="h-screen w-full"></canvas>
-        
+        <canvas
+          id="gameCanvas"
+          ref={gameRef}
+          className="h-screen w-full"
+        ></canvas>
       </main>
     </>
   );
