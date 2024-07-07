@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Game.css";
 import Phaser from "phaser";
 import bg from "../assets/bg.png";
 import basket from "../assets/basket.png";
@@ -13,9 +12,9 @@ const sizes = {
 
 const Game = () => {
   const navigate = useNavigate();
-  const gameRef = useRef<Phaser.Game | null>(null);
+  const gameRef = useRef<HTMLDivElement | null>(null);
   const [points, setPoints] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(5)
+  const [remainingTime, setRemainingTime] = useState(5);
 
   useEffect(() => {
     const speedDown = 800;
@@ -47,7 +46,7 @@ const Game = () => {
         this.points = 0;
         this.textTime = {} as Phaser.GameObjects.Text;
         this.timedEvent = {} as Phaser.Time.TimerEvent;
-        this.remainingTime = 5
+        this.remainingTime = 5;
         this.textScore = {} as Phaser.GameObjects.Text;
         this.isGameOver = false;
         this.navigate = () => {};
@@ -87,7 +86,7 @@ const Game = () => {
           this.cursor = this.input.keyboard.createCursorKeys();
         }
 
-        this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
+        this.target = this.physics.add.image(0, 0, "apple");
         this.target.setMaxVelocity(100, speedDown);
 
         this.physics.add.overlap(
@@ -102,7 +101,7 @@ const Game = () => {
           font: "25px Arial",
           color: "#000000",
         });
-        this.textTime = this.add.text(10, 10, "Remaining Time: 01:00", {
+        this.textTime = this.add.text(10, 10, "Remaining Time: 00:05", {
           font: "25px verdana",
           color: "#000000",
         });
@@ -170,7 +169,7 @@ const Game = () => {
       }
 
       getRandomX() {
-        return Math.floor(Math.random() * 950);
+        return Math.floor(Math.random() * (sizes.width - this.target.width));
       }
 
       targetHit() {
@@ -182,22 +181,8 @@ const Game = () => {
       }
 
       gameOver() {
-        const gameEndScoreSpan = document.getElementById("gameEndScoreSpan");
-        const gameWinLoseSpan = document.getElementById("gameWinLoseSpan");
-
-        if (gameEndScoreSpan && gameWinLoseSpan) {
-          if (this.points >= 45) {
-            gameEndScoreSpan.textContent = this.points.toString();
-            gameWinLoseSpan.textContent = "Win! :>";
-          } else {
-            gameEndScoreSpan.textContent = this.points.toString();
-            gameWinLoseSpan.textContent = "Lose! :<";
-          }
-        }
-
-        this.navigate("/gameover"); // Use navigate function
+        this.navigate("/gameover");
         this.isGameOver = true;
-
         this.scene.stop();
       }
     }
@@ -216,24 +201,25 @@ const Game = () => {
       scene: [GameScene],
     };
 
-    gameRef.current = new Phaser.Game(config);
-    gameRef.current.scene.start("scene-game", { navigate });
+    // Clear the previous game instance
+    if (gameRef.current) {
+      while (gameRef.current.firstChild) {
+        gameRef.current.removeChild(gameRef.current.firstChild);
+      }
+    }
+
+    const gameInstance = new Phaser.Game(config);
+    gameInstance.scene.start("scene-game", { navigate });
 
     return () => {
-      if (gameRef.current) {
-        gameRef.current.destroy(true);
-      }
+      gameInstance.destroy(true);
     };
   }, [navigate]);
 
   return (
     <>
-      <main>
-        <canvas
-          id="gameCanvas"
-          ref={gameRef}
-          className="h-screen w-full"
-        ></canvas>
+      <main className="flex relative max-h-screen w-full" ref={gameRef}>
+        <canvas id="gameCanvas" className="flex h-full w-full"></canvas>
       </main>
     </>
   );

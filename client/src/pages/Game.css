@@ -5,13 +5,13 @@
 
 
 
-main {
+/* main {
   flex: 1;
   display: flex;
-}
+} */
 
-#gameCanvas {
-  /* border: 1px solid red; */
+/* #gameCanvas {
+  
   position: absolute;
   top: 50%;
   left: 50%;
@@ -21,7 +21,7 @@ main {
   
   
   
-}
+} */
 
 /* .gameUI {
   position: absolute;

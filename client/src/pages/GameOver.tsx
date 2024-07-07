@@ -46,7 +46,7 @@ export default function GameOver() {
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center h-full w-full">
+          <div className="flex justify-center items-center max-h-full w-full">
             <img src={gameover} alt="gameOver" className="max-w-[600px] " />
           </div>
         </div>
