@@ -2,6 +2,7 @@ import gamebg from "../assets/homebg.png"
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../components/aceui/herosection";
 import { useNavigate } from "react-router-dom";
+import { TextGenerateEffect } from "../components/aceui/textani";
 export default function Home() {
   const navigate = useNavigate()
 
@@ -20,9 +21,13 @@ export default function Home() {
           alt="bg"
           className="object-cover h-full w-full absolute"
         />
-        <div className="relative z-20 bg-black/90 w-full h-full">
-        
-          <HeroHighlight onClick={handleClick}>
+        <div className="relative z-20 bg-black/90 w-full h-full flex flex-col">
+          <TextGenerateEffect
+            words={"Degen Domino"}
+            className="text-center text-4xl font-bold lg:text-[10rem] selection:text-yellow-500 selection:bg-black"
+          />
+
+          <HeroHighlight>
             <motion.h1
               initial={{
                 opacity: 0,
@@ -39,7 +44,10 @@ export default function Home() {
               className="text-2xl px-4 md:text-4xl lg:text-6xl font-bold text-neutral-700 dark:text-white max-w-4xl  leading-relaxed lg:leading-snug text-center mx-auto "
             >
               Unleash Your Inner Gamer: <br /> The Battlefield Awaits <br />
-              <Highlight className="text-[#f7f2e8] cursor-pointer">
+              <Highlight
+                className="text-[#f7f2e8] cursor-pointer"
+                onClick={handleClick}
+              >
                 Go Hard or Go Home
               </Highlight>
             </motion.h1>

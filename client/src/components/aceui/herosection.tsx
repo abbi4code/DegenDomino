@@ -7,11 +7,12 @@ export const HeroHighlight = ({
   children,
   className,
   containerClassName,
-  onClick
+  
 }: {
   children: React.ReactNode;
   className?: string;
   containerClassName?: string;
+ 
 }) => {
   let mouseX = useMotionValue(0);
   let mouseY = useMotionValue(0);
@@ -30,10 +31,10 @@ export const HeroHighlight = ({
   return (
     <div
       className={cn(
-        "relative h-[40rem] flex items-center bg-transparent justify-center w-full group ",
+        "relative h-full flex items-center bg-transparent justify-center w-full group ",
         containerClassName
       )}
-      onClick={onClick}
+
       onMouseMove={handleMouseMove}
     >
       <div className="absolute inset-0 bg-dot-thick-neutral-800 dark:bg-dot-thick-neutral-800  pointer-events-none" />
@@ -65,9 +66,13 @@ export const HeroHighlight = ({
 export const Highlight = ({
   children,
   className,
+  onClick,
+  key,
 }: {
   children: React.ReactNode;
   className?: string;
+  onClick?: any
+  key?: boolean | undefined
 }) => {
   return (
     <motion.span
@@ -88,9 +93,13 @@ export const Highlight = ({
         display: "inline",
       }}
       className={cn(
-        `relative inline-block pb-1   px-1 rounded-lg bg-gradient-to-r from-indigo-300 to-purple-300 dark:from-indigo-500 dark:to-purple-500`,
+        `relative inline-block pb-1   px-1 rounded-lg bg-gradient-to-r ${
+          key ? "from-indigo-500 to-purple-500" : "to-[#e90c38] from-[#e6eb55] p-2"
+        } `,
         className
       )}
+      //@ts-ignore
+      onClick={onClick}
     >
       {children}
     </motion.span>

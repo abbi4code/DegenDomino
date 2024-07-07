@@ -13,8 +13,14 @@ module.exports = {
       },
       animation: {
         meteor: "meteor 10s linear infinite",
+        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
       },
       keyframes: {
+        "border-beam": {
+          "100%": {
+            "offset-distance": "100%",
+          },
+        },
         meteor: {
           "0%": {
             transform: "translateY(-100%) rotate(215deg)",
