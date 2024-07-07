@@ -11,3 +11,8 @@
        1px  1px 0 #000;
   }
 }
+
+@font-face {
+    font-family: "gamefont";
+    src: url('/client/src//assets/gameFont.otf');
+}

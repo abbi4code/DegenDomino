@@ -201,7 +201,7 @@ const Game = () => {
       scene: [GameScene],
     };
 
-    // Clear the previous game instance
+    // actually this is imp bacuse each time the scene will get buried one over the other
     if (gameRef.current) {
       while (gameRef.current.firstChild) {
         gameRef.current.removeChild(gameRef.current.firstChild);

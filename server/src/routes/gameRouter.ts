@@ -97,7 +97,7 @@ gameRouter.post('/startgame', async(c)=>{
         },
         data:{
             token: {
-                decrement: 5
+               decrement: 5
             }
         }
     })
