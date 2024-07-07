@@ -42,20 +42,12 @@ main {
   z-index: 2;
 }
 
-.gameUI * {
-  text-align: center;
-  margin-top: 5px;
-}
+
 
 #gameStartDiv {
   display: flex;
 }
-#gameStartDiv h1{
-  font-family: val ;
-  font-size: 10rem;
-  margin-bottom: 3rem;
-  color: #C7372F;
-}
+
 #gameEndDiv {
   display: none;
   /* background-image: url('/assets/gameoverbg.jpg'); */
