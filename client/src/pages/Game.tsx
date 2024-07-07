@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import "./Game.css"
 import Phaser from "phaser";
 import bg from "../assets/bg.png"
@@ -11,9 +11,10 @@ const sizes = {
 };
 
 const Game = () => {
+   const navigate = useNavigate()
   const gameRef = useRef<Phaser.Game | null>(null);
   const [points, setPoints] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(60);
+  const [remainingTime, setRemainingTime] = useState(5);
 
   useEffect(() => {
     const speedDown = 800;
@@ -40,7 +41,7 @@ const Game = () => {
         this.points = 0;
         this.textTime = {} as Phaser.GameObjects.Text;
         this.timedEvent = {} as Phaser.Time.TimerEvent;
-        this.remainingTime = 60;
+        this.remainingTime = 5;
         this.isGameOver = false;
       }
 
@@ -51,7 +52,7 @@ const Game = () => {
       }
 
       create() {
-        this.scene.pause("scene-game");
+        // this.scene.pause("scene-game");
 
         //this.add.image(0, 0, "bg").setOrigin(0, 0);
         const background = this.add.image(0, 0, "bg").setOrigin(0, 0);
@@ -190,7 +191,9 @@ const Game = () => {
         this.isGameOver = true;
 
         gameEndDiv.style.display = "flex";
+        navigate('/gameover')
         this.scene.stop();
+
       }
     }
 
@@ -219,17 +222,18 @@ const Game = () => {
     const gameEndDiv = document.getElementById("gameEndDiv")!;
     const gameWinLoseSpan = document.getElementById("gameWinLoseSpan")!;
     const gameEndScoreSpan = document.getElementById("gameEndScoreSpan")!;
-
-    if (gameStartBtn) {
-      gameStartBtn.addEventListener("click", () => {
-        if (gameStartDiv) {
-          gameStartDiv.style.display = "none";
-        }
-        if (gameRef.current) {
-          gameRef.current.scene.resume("scene-game");
-        }
-      });
+    if (gameRef.current) {
+      gameRef.current.scene.resume("scene-game");
     }
+
+    // if (gameStartBtn) {
+    //   gameStartBtn.addEventListener("click", () => {
+    //     if (gameStartDiv) {
+    //       gameStartDiv.style.display = "none";
+    //     }
+        
+    //   });
+    // }
 
     return () => {
       if (gameRef.current) {
@@ -242,31 +246,7 @@ const Game = () => {
     <>
       <main>
         <canvas id="gameCanvas" className="h-screen w-full"></canvas>
-        <div id="gameStartDiv" className="gameUI">
-          <h1>Apple Catcher</h1>
-          <p>
-            <b>Welcome to the Apple Challenge!</b>
-          </p>
-          <p>You've got 60 seconds to master the art of apple catching.</p>
-          <p>Catch more than 45 apples, and victory will be yours!</p>
-          <p>Fall short of 45, and face the sweet taste of defeat.</p>
-          <p>Click the start button to embark on this fruity adventure!</p>
-          <button id="gameStartBtn">
-            <p>Start</p>
-          </button>
-        </div>
-        <div id="gameEndDiv" className="gameUI">
-          <p>Game Over</p>
-          <h1>
-            You <span id="gameWinLoseSpan"></span>
-          </h1>
-          <h1>
-            Final Score: <span id="gameEndScoreSpan"></span>
-          </h1>
-          <p>Refresh the page to play again</p>
-          <p>Points: {points}</p>
-          <p>Remaining Time: {remainingTime}</p>
-        </div>
+        
       </main>
     </>
   );

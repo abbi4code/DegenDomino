@@ -17,12 +17,12 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  z-index: 1;
+  z-index: 100;
   
   
   
 }
-
+/* 
 .gameUI {
   position: absolute;
   width: 100%;
@@ -31,7 +31,7 @@ main {
   background-color: #FBAB7E;
   background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%); 
 
-  /* background-image: url('/assets/homebg.jpg'); */
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -58,7 +58,7 @@ main {
 }
 #gameEndDiv {
   display: none;
-  /* background-image: url('/assets/gameoverbg.jpg'); */
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -93,4 +93,4 @@ main {
   height: 100%;
 }
   
-}
+} */

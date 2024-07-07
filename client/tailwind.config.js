@@ -2,6 +2,10 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        custom: ["gamefont", "sans-serif"], // Add custom font
+        roboto: ["Roboto", "sans-serif"], // For Google Fonts example
+      },
       animation: {
         meteor: "meteor 10s linear infinite",
       },
