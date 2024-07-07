@@ -16,7 +16,7 @@ export default function Games() {
           <div className="flex justify-center flex-col items-center h-full w-full">
             <TextGenerateEffect
               words={"All games available for now"}
-              className="mt-20 font-extrabold text-5xl"
+              className="mt-2 font-extrabold text-5xl"
             />
             <div className="flex ">
               <CardContainer className="inter-var flex flex-col items-center justify-center">

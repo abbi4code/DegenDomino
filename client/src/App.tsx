@@ -7,6 +7,9 @@ import Signup from './pages/Signup'
 import Leaderboard from './pages/Leaderboard'
 import Games from './pages/Games'
 import Home from './pages/Home'
+import Game from './pages/Game'
+import GameOver from './pages/GameOver'
+import StartGame from './pages/StartGame'
 
 function App() {
 
@@ -20,6 +23,9 @@ function App() {
       <Route path='/signup' element={<Signup/>}/>
       <Route path='/leaderboard' element={<Leaderboard/>}/>
       <Route path='/games' element={<Games/>}/>
+      <Route path='/game' element={<Game/>}/>
+      <Route path='/gameover' element={<GameOver/>}/>
+      <Route path='/startgame' element={<StartGame/>}/>
     </Routes>
     </BrowserRouter>
       
