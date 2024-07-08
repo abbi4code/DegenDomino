@@ -115,33 +115,49 @@ gameRouter.get('/startgame', async(c)=>{
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
 
-    const userID = c.get("userID")
-    console.log(userID)
+    try {
+        const userID = c.get("userID");
+        const gameid = c.req.query("gameid");
+        console.log(userID);
 
-    const validbalanceuser = await prisma.user.findUnique({
-        where:{
-            id: userID
-        }
-    })
-    if(!validbalanceuser||  validbalanceuser?.token <= 0){
-        return c.json({msg: "insufficient token "})
-    }
-
-    const user = await prisma.user.update({
-        where: {
-            id: userID,
-        },
-        data:{
-            token: {
-               decrement: 5
+        const validbalanceuser = await prisma.user.findUnique({
+            where: {
+                id:userID
             }
+        })
+        
+
+
+        if (!validbalanceuser || validbalanceuser?.token <= 0) {
+          return c.json({ msg: "insufficient token ", userID });
         }
-    })
 
+        const user = await prisma.user.update({
+          where: {
+            id: userID,
+          },
+          data: {
+            token: {
+              decrement: 5,
+            },
+          },
+        });
+        // const game = await prisma.score.create({
+        //     data:{
+        //         gameid: gameid,
+        //         userid: userID
+        //     }
+        // })
 
-    const userinfo = {fullname: user.full_name, token: user.token}
+        const userinfo = { fullname: user.full_name, token: user.token };
 
-    return c.json({msg:"game page", userinfo})
+        return c.json({ msg: "game page", userinfo, gameid });
+        
+    } catch (error) {
+        console.log(error)
+        return c.json({error})
+        
+    }
 
 })
 
@@ -191,14 +207,17 @@ gameRouter.post('/gameover', async(c)=>{
 
 
     const id = c.get("userID")
+    const gameid = c.req.query('gameid')
 
     try {
         const score = await c.req.json()
+        const scorevalue = parseInt(score.score)
         const gamescore = await prisma.score.create({
             //@ts-ignore
             data:{
-                score: score,
-                userid: id
+                score: scorevalue,
+                userid: id,
+                gameid: gameid
 
             }
         })
@@ -206,6 +225,7 @@ gameRouter.post('/gameover', async(c)=>{
         const maxscore = await prisma.score.aggregate({
             where:{
                 userid: id,
+                gameid:gameid
                 
             },
             _max: {
@@ -214,7 +234,7 @@ gameRouter.post('/gameover', async(c)=>{
             }
         })
 
-        console.log(maxscore,gamescore)
+        console.log("maxcore",maxscore,gamescore)
 
         const highest_score = await prisma.user.update({
             where:{
@@ -228,7 +248,7 @@ gameRouter.post('/gameover', async(c)=>{
 
         console.log(highest_score)
 
-        return c.json({highest_score, msg: "gameoverpg working"})
+        return c.json({highest_score, gamescore,msg: "gameoverpg working"})
 
         
     } catch (error) {
@@ -239,3 +259,16 @@ gameRouter.post('/gameover', async(c)=>{
 
 
 })
+
+
+// gameRouter.get("/test", async (c) => {
+//   try {
+//     const id = c.req.query("gameid");
+//     console.log(id);
+
+//     return c.json({ id });
+//   } catch (error) {
+//     console.log("hi there");
+//     return c.json({ error: "An error occurred" }, 500);
+//   }
+// });

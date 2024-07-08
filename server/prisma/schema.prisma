@@ -26,6 +26,7 @@ model User {
   scores Score[]
   // games Game[]
 
+
 }
 
 model Score{
@@ -45,6 +46,7 @@ model Game{
   description String
   createdAt DateTime @default(now())
   tokenreq Int @default(5)
+
   // userid String
   // user User @relation(fields: [userid], references: [id])
   scores Score[]
