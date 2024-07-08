@@ -16,6 +16,9 @@ export default function Signin() {
         email: signIninputs.email,
         password: signIninputs.password,
       });
+      console.log(res)
+      const token = res.data.token
+      localStorage.setItem("usertoken",token)
   
 
       if(res.status === 200){

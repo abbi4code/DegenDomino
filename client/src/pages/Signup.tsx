@@ -18,12 +18,11 @@ const handleSubmit = async (e : any) => {
         email: inputs.email,
         password: inputs.password,
         full_name: inputs.full_name,
-      },
-      {
-        withCredentials: true,
       }
     );
     console.log(res);
+     const token = res.data.token;
+     localStorage.setItem("usertoken", token);
     if (res.status === 200) {
       navigate('/')
       

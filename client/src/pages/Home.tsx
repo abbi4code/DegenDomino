@@ -8,7 +8,13 @@ export default function Home() {
 
 
   const handleClick = () =>{
+    const token = localStorage.getItem("usertoken")
+    if(token){
       navigate('/games')
+
+    }else{
+      navigate('/signin')
+    }
 
   }
 

@@ -109,7 +109,7 @@ gameRouter.get('/allgames', async(c)=>{
 
 
 // this is for when user click on any game to start
-gameRouter.post('/startgame', async(c)=>{
+gameRouter.get('/startgame', async(c)=>{
 
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
