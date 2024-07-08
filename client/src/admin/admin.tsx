@@ -35,7 +35,7 @@ export default function Admin() {
             });
             console.log(res.data);
             if(res.status === 200){
-                navigate('/postgame')
+                navigate('/postgames')
             }
           }}
         >

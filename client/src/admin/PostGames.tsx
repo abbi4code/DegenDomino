@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 interface postgameprops{
     title: string,
     description: string
-    tokenreq: Number | null
+    tokenreq: number | null
 }
 
 export default function PostGames() {
@@ -28,7 +28,7 @@ export default function PostGames() {
           }
         />
         <input
-          type="password"
+          type="text"
           placeholder="Description"
           className="rounded-lg border border-black w-full px-2 py-1"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -39,26 +39,33 @@ export default function PostGames() {
           type="number"
           placeholder="token req for each game to start"
           className="rounded-lg border border-black w-full px-2 py-1"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setpostGameinputs((c) => ({ ...c, tokenreq: e.target.value }))
+          onChange={(e) =>
+            //@ts-ignore
+            setpostGameinputs((c) => ({ ...c, tokenreq: e.target.value}))
           }
         />
         <button
           className="px-3 py-2 rounded-lg border bg-black text-white border-black font-bold text-xl"
           onClick={async () => {
-            const res = await axios.post(`${BackendUrl}/admin/signin`, {
-              title: postGameinputs.title,
-              description: postGameinputs.description,
-              tokenreq: postGameinputs.tokenreq
-            });
-            console.log(res.data);
-            if (res.status === 200) {
-              navigate("/postgame");
+            try {
+                const res = await axios.post(`${BackendUrl}/admin/postgame`, {
+                  title: postGameinputs.title,
+                  description: postGameinputs.description,
+                  tokenreq: postGameinputs.tokenreq,
+                },{
+                    withCredentials: true
+                });
+                console.log(res.data);
+                
+            } catch (error) {
+                console.log(error)
+                
             }
+            
           }}
         >
           {" "}
-          Signin
+          PostGame
         </button>
       </div>
     </div>

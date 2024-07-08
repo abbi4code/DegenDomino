@@ -44,7 +44,7 @@ adminRouter.post('/signin',async(c)=>{
         //@ts-ignore
         const token = await sign(admin.id, c.env.JWT_SECRET)
         console.log(token)
-        setCookie(c, "token", token, {
+        setCookie(c, "admintoken", token, {
           httpOnly: true,
           sameSite: "Lax",
           maxAge: 1000,
@@ -65,7 +65,7 @@ adminRouter.post('/signin',async(c)=>{
 })
 adminRouter.use("/*", async (c, next) => {
   try {
-    const token = getCookie(c, "token");
+    const token = getCookie(c, "admintoken");
     if (!token) {
       c.status(404);
       return c.json({ msg: "token not provided" });
@@ -83,6 +83,7 @@ adminRouter.use("/*", async (c, next) => {
     await next();
   } catch (error) {
     console.log(error);
+    return c.json({msg: "error while validating token"})
   }
 });
 
@@ -93,30 +94,36 @@ adminRouter.post('/postgame', async(c)=>{
     }).$extends(withAccelerate())
 
     try {
-
         const body = await c.req.json()
 
-        const adminid = parseInt(c.get("adminId"));
-        console.log(adminid)
+        const adminid = c.get("adminId")
+        if(!body){
+            c.status(404)
+            return c.json({msg: "invalid inputs"})
+        }
+
 
         const game = await prisma.game.create({
             data:{
                 title: body.title,
                 description: body.description,
+                tokenreq: body.tokenreq,
+                
                 adminid: adminid
             }
         })
+        c.status(200)
 
-        return c.json({"adminid": adminid, game})
+        return c.json({body,adminid,game})
 
 
         
     } catch (error) {
         console.log(error)
+        c.status(404)
+        return c.json({msg:"error while posting games or game with that name already made"})
         
     }
-
-
 })
 
 adminRouter.get("/bulk",async(c)=>{
