@@ -34,6 +34,8 @@ export default function Admin() {
                 password: adminInputs.password
             });
             console.log(res.data);
+            const token = res.data.token
+            localStorage.setItem("admintoken",token)
             if(res.status === 200){
                 navigate('/postgames')
             }

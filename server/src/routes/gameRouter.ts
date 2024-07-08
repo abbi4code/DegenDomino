@@ -21,22 +21,31 @@ export const gameRouter = new Hono<{
 
 gameRouter.use('/*', async(c,next)=>{
 
-    const token = getCookie(c,"token")
-    if(!token){
-        return c.json({msg: "token not provided"})
+    // const token = getCookie(c,"token")
+    try {
+        const token = c.req.header("Authorization");
+        if (!token) {
+          c.status(404);
+          return c.json({ msg: "token not provided" });
+        }
+
+        const validtoken = await verify(token, c.env.JWT_SECRET);
+        if (!validtoken) {
+          c.status(404);
+          return c.json({ msg: "invalid token" });
+        }
+        //@ts-ignore
+        c.set("userID", validtoken);
+
+        console.log("token verified", validtoken);
+
+        await next();
+        
+    } catch (error) {
+        console.log(error)
+        return c.json({error})
+        
     }
-
-    const validtoken = await verify(token, c.env.JWT_SECRET)
-    if(!validtoken){
-        return c.json({msg: "invalid token"})
-    }
-    //@ts-ignore
-    c.set("userID", validtoken) 
-
-
-    console.log("token verified", validtoken)
-
-    await next()
 
 
 
@@ -48,6 +57,8 @@ gameRouter.get("/game", async (c) => {
   return c.json({ msg: "cheaking if this working" });
 });
 
+
+// this is for leaderboard (top 10)
 gameRouter.get('/bulk', async(c)=>{
 
    const prisma = new PrismaClient({
@@ -61,6 +72,7 @@ gameRouter.get('/bulk', async(c)=>{
             highest_score: "desc",
           },
         });
+        c.status(200)
 
         return c.json({players})
         
@@ -73,6 +85,30 @@ gameRouter.get('/bulk', async(c)=>{
     
 })
 
+//all games route
+
+gameRouter.get('/allgames', async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+
+    try {
+        const game = await prisma.game.findMany()
+        c.status(200)
+        return c.json({game})
+        
+    } catch (error) {
+        c.status(404)
+        return c.json({msg: "Internal Server Error"})
+        
+    }
+
+    
+})
+
+
+
+// this is for when user click on any game to start
 gameRouter.post('/startgame', async(c)=>{
 
     const prisma = new PrismaClient({

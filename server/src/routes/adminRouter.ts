@@ -3,11 +3,8 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, sign, verify } from "hono/jwt";
 import {
-  getCookie,
-  getSignedCookie,
   setCookie,
-  setSignedCookie,
-  deleteCookie,
+ 
 } from "hono/cookie";
 
 export const adminRouter = new Hono<{
@@ -44,13 +41,19 @@ adminRouter.post('/signin',async(c)=>{
         //@ts-ignore
         const token = await sign(admin.id, c.env.JWT_SECRET)
         console.log(token)
-        setCookie(c, "admintoken", token);
+
+        setCookie(c, "adminntoken", token, {
+            httpOnly:true,
+            secure:true,
+            sameSite: "None",
+            maxAge: 9999999,
+          });
 
 
 
         c.status(200)
 
-        return c.json({msg: "admin successfully signin"})
+        return c.json({msg: "admin successfully signin",token})
         
     } catch (error) {
         console.log(error)
@@ -61,7 +64,9 @@ adminRouter.post('/signin',async(c)=>{
 })
 adminRouter.use("/*", async (c, next) => {
   try {
-    const token = getCookie(c, "admintoken");
+    // const token = getCookie(c, "adminntoken")
+  const token =  c.req.header("Authorization") || "";
+  console.log(token)
     if (!token) {
       c.status(404);
       return c.json({ msg: "token not provided" });
@@ -98,19 +103,21 @@ adminRouter.post('/postgame', async(c)=>{
             return c.json({msg: "invalid inputs"})
         }
 
+        const validtokenreq = parseInt(body.tokenreq);
+
 
         const game = await prisma.game.create({
             data:{
                 title: body.title,
                 description: body.description,
-                tokenreq: body.tokenreq,
+                tokenreq: validtokenreq,
                 
                 adminid: adminid
             }
         })
         c.status(200)
 
-        return c.json({body,adminid,game})
+        return c.json({msg: "Game Posted Successfully"})
 
 
         

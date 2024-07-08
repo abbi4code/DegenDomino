@@ -72,10 +72,15 @@ authRouter.post('/signup', async(c)=>{
         const token = await sign(user.id , c.env.JWT_SECRET)
         console.log(user)
 
-        setCookie(c, "token", token,{httpOnly: true,sameSite: "Lax",maxAge: 2000})
+        setCookie(c, "token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "None",
+          maxAge: 9999999,
+        });
         c.status(200)
 
-        return c.json({msg: "user succesfully signup", token,user})
+        return c.json({msg: "user succesfully signup", token})
 
 
         
@@ -125,12 +130,13 @@ authRouter.post('/signin', async(c)=>{
 
   setCookie(c, "token", token, {
     httpOnly: true,
-    sameSite: "Lax",
-    maxAge: 2000,
+    secure: true,
+    sameSite: "None",
+    maxAge: 9999999,
   });
   c.status(200)
 
-        return c.json({msg: "user signin successfully", token,existuser})
+        return c.json({msg: "user signin successfully",token})
 
 
 

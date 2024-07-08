@@ -3,6 +3,10 @@ import { TextGenerateEffect } from "../components/aceui/textani";
 import { CardBody, CardContainer, CardItem } from "../components/aceui/Card";
 import applebg from "../assets/applebgpng-removebg-preview.png"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BackendUrl } from "../config";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 
 
@@ -13,8 +17,24 @@ export default function Games() {
   const handleClick = ()=>{
     navigate('/startgame')
   }
+  const token = Cookies.get()
+  console.log(token.token)
+
+
+    const getAllgames = async () => {
+      const res = await axios.get(`${BackendUrl}/game/allgames`);
+      console.log(res.data,"hi there from here");
+    };
+    getAllgames()
+
+    console.log("hi there")
+
+
+
+
   return (
     <div className="max-h-screen w-full">
+      {/* <button className="p-4 rounded-xl border border-black" onClick={getAllgames}>click</button> */}
       <div className="relative h-full w-full bg-black">
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
         <div className="h-full w-full text-white relative">
