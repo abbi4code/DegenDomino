@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BackendUrl } from '../config';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 
 //<--------for now game card img wil hard provided from client side will add multer func later----------->
@@ -15,6 +16,13 @@ interface postgameprops{
 export default function PostGames() {
     const [postGameinputs, setpostGameinputs] = useState<postgameprops>({title:"", description:"" ,tokenreq: null})
     const navigate = useNavigate()
+
+      useEffect(() => {
+        // Log cookies to see if the token is present
+        const admintoken = Cookies.get("admintoken")
+        console.log("admintoken", admintoken)
+        console.log("Document cookies:", document.cookie);
+      }, []);
   return (
     <div className="h-screen w-full flex justify-center items-center">
       <div className="flex flex-col gap-4 border border-black rounded-xl p-4 min-w-[40rem] text-black">

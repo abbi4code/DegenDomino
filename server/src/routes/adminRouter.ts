@@ -44,11 +44,7 @@ adminRouter.post('/signin',async(c)=>{
         //@ts-ignore
         const token = await sign(admin.id, c.env.JWT_SECRET)
         console.log(token)
-        setCookie(c, "admintoken", token, {
-          httpOnly: true,
-          sameSite: "Lax",
-          maxAge: 1000,
-        });
+        setCookie(c, "admintoken", token);
 
 
 
