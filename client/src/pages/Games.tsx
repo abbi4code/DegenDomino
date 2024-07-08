@@ -1,36 +1,49 @@
-
 import { TextGenerateEffect } from "../components/aceui/textani";
 import { CardBody, CardContainer, CardItem } from "../components/aceui/Card";
-import applebg from "../assets/applebgpng-removebg-preview.png"
+import applebg from "../assets/applebgpng-removebg-preview.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BackendUrl } from "../config";
-import { useEffect } from "react";
-import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
-
-
+interface gameprops{
+  title: string,
+  description: string,
+  createdAt?: Date,
+  id: string,
+  tokenreq?: integer
+ 
+}
 
 export default function Games() {
-  const navigate = useNavigate()
-
-  const handleClick = ()=>{
-    navigate('/startgame')
-  }
-  const token = Cookies.get()
-  console.log(token.token)
+  const navigate = useNavigate();
+  const [games, setGames] = useState([]);
+  const [loader,setloader] = useState(false)
 
 
+
+  useEffect(() => {
     const getAllgames = async () => {
-      const res = await axios.get(`${BackendUrl}/game/allgames`);
-      console.log(res.data,"hi there from here");
+      setloader(true)
+      const token = localStorage.getItem("usertoken");
+      const res = await axios.get(`${BackendUrl}/game/allgames`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setGames(res.data.game)
+      setloader(false)
+      console.log("hi there from here", res.data.game);
+      console.log("games for gun", games);
     };
-    getAllgames()
-
-    console.log("hi there")
+    getAllgames();
 
 
+  }, []);
 
+  const handleClick = () => {
+    navigate("/startgame");
+  };
 
   return (
     <div className="max-h-screen w-full">
@@ -43,35 +56,41 @@ export default function Games() {
               words={"All games available for now"}
               className="mt-2 font-extrabold text-5xl"
             />
-            <div className="flex ">
-              <CardContainer className="inter-var flex flex-col items-center justify-center">
-                {/* <-------for now only apple game added------> {maybe later i will add more} */}
-                <CardBody className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-max sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  " onClick={handleClick}>
-                  <CardItem
-                    translateZ="50"
-                    className="text-xl font-bold text-neutral-600 dark:text-white"
-                  >
-                    Apple Catcher
-                  </CardItem>
-                  <CardItem
-                    as="p"
-                    translateZ="60"
-                    className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300"
-                  >
-                    Collect as many apple as you can !!
-                  </CardItem>
-                  <CardItem translateZ="100" className="w-full mt-1">
-                    <Image
-                      src={applebg}
-                      
-                      className="h-100 w-full object-cover rounded-xl group-hover/card:shadow-xl"
-                      alt="thumbnail"
-                    />
-                  </CardItem>
+            {loader ? <div className="flex justify-center font-bold text-6xl items-center h-screen  w-full"> Games loading ...</div> : <div className="flex ">
+              {games.map((game:gameprops) => (
+                <CardContainer
+                  className="inter-var flex flex-col items-center justify-center"
                  
-                </CardBody>
-              </CardContainer>
-            </div>
+                >
+                  {/* <-------for now only apple game added------> {maybe later i will add more} */}
+                  <CardBody
+                    className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-max sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  "
+                    onClick={handleClick}
+                  >
+                    <CardItem
+                      translateZ="50"
+                      className="text-xl font-bold text-neutral-600 dark:text-white"
+                    >
+                      {game.title}
+                    </CardItem>
+                    <CardItem
+                      as="p"
+                      translateZ="60"
+                      className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300"
+                    >
+                      {game.description}
+                    </CardItem>
+                    <CardItem translateZ="100" className="w-full mt-1">
+                      <Image
+                        src={applebg}
+                        className="h-100 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+                        alt="thumbnail"
+                      />
+                    </CardItem>
+                  </CardBody>
+                </CardContainer>
+              ))}
+            </div>}
           </div>
         </div>
       </div>
@@ -79,15 +98,14 @@ export default function Games() {
   );
 }
 
-
 // for now removed lampcontainer add it later (keeping simple bg for now)
 
 interface imgaeprops {
-  src: string,
-  className: string,
-  alt: string
+  src: string;
+  className: string;
+  alt: string;
 }
 
-export function Image({src,className,alt}: imgaeprops){
-  return <img src={src} alt={alt} className={className}  />
+export function Image({ src, className, alt }: imgaeprops) {
+  return <img src={src} alt={alt} className={className} />;
 }
