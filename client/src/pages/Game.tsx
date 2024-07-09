@@ -4,6 +4,7 @@ import Phaser from "phaser";
 import bg from "../assets/bg.png";
 import basket from "../assets/basket.png";
 import apple from "../assets/apple.png";
+import { useSearchParams } from "react-router-dom";
 
 const sizes = {
   width: window.innerWidth,
@@ -14,7 +15,12 @@ const Game = () => {
   const navigate = useNavigate();
   const gameRef = useRef<HTMLDivElement | null>(null);
   const [points, setPoints] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(5);
+  const [remainingTime, setRemainingTime] = useState(30);
+  const [params] = useSearchParams();
+
+
+  const gameid = params.get("gameid");
+
 
   useEffect(() => {
     const speedDown = 800;
@@ -46,7 +52,7 @@ const Game = () => {
         this.points = 0;
         this.textTime = {} as Phaser.GameObjects.Text;
         this.timedEvent = {} as Phaser.Time.TimerEvent;
-        this.remainingTime = 5;
+        this.remainingTime = 30;
         this.textScore = {} as Phaser.GameObjects.Text;
         this.isGameOver = false;
         this.navigate = () => {};
@@ -101,7 +107,7 @@ const Game = () => {
           font: "25px Arial",
           color: "#000000",
         });
-        this.textTime = this.add.text(10, 10, "Remaining Time: 00:05", {
+        this.textTime = this.add.text(10, 10, "Remaining Time: 00:30", {
           font: "25px verdana",
           color: "#000000",
         });
@@ -181,7 +187,8 @@ const Game = () => {
       }
 
       gameOver() {
-        this.navigate("/gameover");
+
+        this.navigate(`/gameover?gameid=${gameid}&score=${this.points}`);
         this.isGameOver = true;
         this.scene.stop();
       }

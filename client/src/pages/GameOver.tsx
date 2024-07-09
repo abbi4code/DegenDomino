@@ -1,9 +1,33 @@
 import gameovertitle from "../assets/gameovertitle.png"
 import gameover from "../assets/gameover.png"
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BackendUrl } from "../config";
 
 export default function GameOver() {
     const navigate = useNavigate()
+    const [params] = useSearchParams()
+    const [HighestScore, setHighestScore] = useState({highest_score: ""})
+
+    const score = params.get("score")
+    const gameid = params.get("gameid")
+
+    useEffect(() => {
+        const sendScore = async () => {
+            const res = await axios.get(`${BackendUrl}/game/gameover?gameid=${gameid}&score=${score}`, {
+                headers: {
+                    Authorization: localStorage.getItem("usertoken")
+                }
+            })
+            setHighestScore(res.data.highest_score)
+            console.log(res.data.highest_score)
+        }
+        sendScore()
+    }, [])
+
+
   return (
     <div className="h-screen w-full">
       <div className="h-full w-full relative">
@@ -18,19 +42,21 @@ export default function GameOver() {
 
             <div className="rounded-xl border border-black p-4 font-custom">
               <h1 className="font-bold text-2xl">
-                Your score: <span>score</span>
+                Your score: <span>{score}</span>
               </h1>
               <h1 className="font-bold text-2xl">
-                Your score: <span>score</span>
+                
+                Your Highest Score: <span>{HighestScore.highest_score}</span>
               </h1>
-              <h1 className="font-bold text-2xl">
+              {/* <------ i will put highest score of the entire game----> {with name} */}
+              {/* <h1 className="font-bold text-2xl">
                 Your score: <span>score</span>
-              </h1>
+              </h1> */}
               <div className="flex p-5 gap-5">
                 <button
                   className="font-bold px-3 py-2 border border-black text-outline bg-yellow-400 text-green-600 text-2xl rounded-xl "
                   onClick={() => {
-                    navigate("/startgame");
+                    navigate(`/startgame?gameid=${gameid}`);
                   }}
                 >
                   Play Again

@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
+import { JWTPayload } from "hono/utils/jwt/types";
 
 
 
@@ -29,12 +30,12 @@ gameRouter.use('/*', async(c,next)=>{
           return c.json({ msg: "token not provided" });
         }
 
-        const validtoken = await verify(token, c.env.JWT_SECRET);
+        const validtoken = await verify(token, c.env.JWT_SECRET) ;
         if (!validtoken) {
           c.status(404);
           return c.json({ msg: "invalid token" });
         }
-        //@ts-ignore
+        // @ts-ignore
         c.set("userID", validtoken);
 
         console.log("token verified", validtoken);
@@ -199,19 +200,22 @@ gameRouter.get('/token_balance', async(c)=>{
 })
 
 
-gameRouter.post('/gameover', async(c)=>{
+gameRouter.get('/gameover', async(c)=>{
 
      const prisma = new PrismaClient({
        datasourceUrl: c.env.DATABASE_URL,
      }).$extends(withAccelerate());
 
 
-    const id = c.get("userID")
-    const gameid = c.req.query('gameid')
 
     try {
-        const score = await c.req.json()
-        const scorevalue = parseInt(score.score)
+      
+    const id = c.get("userID");
+    const gameid = c.req.query("gameid");
+    const score : any = c.req.query("score");
+    console.log(id, gameid, score);
+        // const score = await c.req.json()
+        const scorevalue = parseInt(score)
         const gamescore = await prisma.score.create({
             //@ts-ignore
             data:{

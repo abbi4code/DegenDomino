@@ -41,8 +41,18 @@ export default function Games() {
 
   }, []);
 
-  const handleClick = () => {
-    navigate("/startgame");
+  const handleClick = async(id:any) => {
+    const gameid = id;
+    const res = await axios.get(`${BackendUrl}/game/allgames`, {
+      headers: {
+        Authorization: localStorage.getItem("usertoken"),
+      },
+    
+    })
+    console.log(res.data)
+
+
+    navigate(`/startgame?gameid=${gameid}`);
   };
 
   return (
@@ -57,15 +67,17 @@ export default function Games() {
               className="mt-2 font-extrabold text-5xl"
             />
             {loader ? <div className="flex justify-center font-bold text-6xl items-center h-screen  w-full"> Games loading ...</div> : <div className="flex ">
-              {games.map((game:gameprops) => (
+              {games.map((game:gameprops,id) => (
                 <CardContainer
                   className="inter-var flex flex-col items-center justify-center"
+                  key={id}
                  
                 >
                   {/* <-------for now only apple game added------> {maybe later i will add more} */}
                   <CardBody
                     className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-max sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  "
-                    onClick={handleClick}
+                    //@ts-ignore
+                    onClick={() =>handleClick(game.id)}
                   >
                     <CardItem
                       translateZ="50"

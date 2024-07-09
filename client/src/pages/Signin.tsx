@@ -4,6 +4,7 @@ import Meteors from '../components/ui/bg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BackendUrl } from '../config';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Signin() {
     const navigate = useNavigate()
@@ -12,19 +13,36 @@ export default function Signin() {
 
     const handleSubmit = async (e: any) => {
       e.preventDefault();
-      const res = await axios.post(`${BackendUrl}/auth/signin`, {
-        email: signIninputs.email,
-        password: signIninputs.password,
-      });
-      console.log(res)
-      const token = res.data.token
-      localStorage.setItem("usertoken",token)
-  
+      try {
+        const res = await axios.post(`${BackendUrl}/auth/signin`, {
+          email: signIninputs.email,
+          password: signIninputs.password,
+        });
+        console.log(res);
+        const token = res.data.token;
+        localStorage.setItem("usertoken", token);
 
-      if(res.status === 200){
-        navigate('/')
-      }else{
-        console.log(res.data)
+        if (res.status === 200) {
+          toast.success("User signin successfully");
+          setTimeout(() => {
+            navigate("/");
+          }, 500);
+        }
+        
+      } catch (error) {
+        //@ts-ignore
+        if (error.response.status === 401) {
+         
+           toast.error("User dont exists");
+        }else if(error.response.status === 400){
+          toast.error("Invalid credentials");
+        }
+        else {
+          toast.error("something went wrong");
+        }
+         
+         console.error(error);
+        
       }
     };
   return (
@@ -48,7 +66,9 @@ export default function Signin() {
                   id="email"
                   className="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 text-white dark:border-gray-600"
                   placeholder="name@company.com"
-                  onChange={(e : React.ChangeEvent<HTMLInputElement>) => setsignIninputs((c) => ({...c, email: e.target.value})) }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setsignIninputs((c) => ({ ...c, email: e.target.value }))
+                  }
                 />
               </div>
               <div>
@@ -61,7 +81,9 @@ export default function Signin() {
                   id="password"
                   placeholder="••••••••"
                   className="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 text-white dark:border-gray-600"
-                  onChange={(e : React.ChangeEvent<HTMLInputElement>) => setsignIninputs((c) => ({...c, password: e.target.value})) }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setsignIninputs((c) => ({ ...c, password: e.target.value }))
+                  }
                 />
               </div>
 
@@ -94,15 +116,40 @@ export default function Signin() {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don't have a account?{" "}
-                <u className="font-medium text-primary-600 hover:underline text-primary-500 cursor-pointer" onClick={()=>(
-                    navigate('/signup')
-                )}> Signup here</u>
+                <u
+                  className="font-medium text-primary-600 hover:underline text-primary-500 cursor-pointer"
+                  onClick={() => navigate("/signup")}
+                >
+                  {" "}
+                  Signup here
+                </u>
               </p>
             </form>
           </div>
         </div>
         ;
       </div>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+          },
+        }}
+      />
     </div>
   );
 }

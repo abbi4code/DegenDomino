@@ -55,7 +55,7 @@ authRouter.post('/signup', async(c)=>{
             }
         })
         if(existuser){
-            c.status(404)
+            c.status(401)
             return c.json({msg: "user already exist"})
 
         }
@@ -112,7 +112,7 @@ authRouter.post('/signin', async(c)=>{
         const validuser = signinInputs.safeParse(body)
         if(!validuser.success){
             const msg = validuser.error.errors.map((err)=> err.message)
-            c.status(404)
+            c.status(400)
             return c.json({msg})
         }
 
@@ -122,7 +122,7 @@ authRouter.post('/signin', async(c)=>{
             }
         })
         if(!existuser){
-            c.status(404)
+            c.status(401)
             return c.json({msg: "user dont exist"})
         }
          //@ts-ignore

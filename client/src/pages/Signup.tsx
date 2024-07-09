@@ -4,6 +4,7 @@ import Meteors from "../components/ui/bg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BackendUrl } from "../config";
+import toast, { Toaster } from "react-hot-toast";
 axios.defaults.withCredentials = true;
 
 const Signup = () => {
@@ -24,10 +25,22 @@ const handleSubmit = async (e : any) => {
      const token = res.data.token;
      localStorage.setItem("usertoken", token);
     if (res.status === 200) {
-      navigate('/')
+
+      toast.success("User created successfully");
+      setTimeout(() => {
+        
+        navigate('/')
+        
+      }, 500);
       
     }
   } catch (error) {
+    if(error.response.status === 401){
+      toast.error("User already exists");
+    }  else{
+
+      toast.error("user already exists");
+    }  
     console.error(error);
     
   }
@@ -84,7 +97,7 @@ const handleSubmit = async (e : any) => {
                   placeholder="••••••••"
                   className="bg-transparent border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 text-white dark:border-gray-600"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setinputs((c) => ({ ...c,password: e.target.value }))
+                    setinputs((c) => ({ ...c, password: e.target.value }))
                   }
                 />
               </div>
@@ -113,7 +126,6 @@ const handleSubmit = async (e : any) => {
               <button
                 type="submit"
                 className="w-full text-white bg-transparent  focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-                
               >
                 Create an account
               </button>
@@ -132,6 +144,27 @@ const handleSubmit = async (e : any) => {
         </div>
         ;
       </div>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+          },
+        }}
+      />
     </div>
   );
 };

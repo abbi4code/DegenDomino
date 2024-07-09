@@ -1,12 +1,18 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../config";
-import { FidgetSpinner, MutatingDots } from "react-loader-spinner";
+import {  MutatingDots } from "react-loader-spinner";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 
 export default function StartGame() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const [loader, setLoader] = useState(false);
+  const [highestscore, setHighestScore] = useState(0);
+
+const gameid = params.get("gameid");
 
   const handleStartGame = async () => {
     setLoader(true);
@@ -16,15 +22,16 @@ export default function StartGame() {
           Authorization: localStorage.getItem("usertoken"),
         },
       });
-      console.log(res.data);
+      console.log(res.data.highestscore);
+
       
-      navigate("/game");
+      navigate(`/game?gameid=${gameid}`);
       setLoader(false);
     } catch (error) {
       console.log(error);
     } 
   };
-
+  
   return (
     <div id="gameStartDivv" className="h-screen w-full flex">
       <div className="h-full w-full relative">
