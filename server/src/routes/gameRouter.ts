@@ -130,6 +130,7 @@ gameRouter.get('/startgame', async(c)=>{
 
 
         if (!validbalanceuser || validbalanceuser?.token <= 0) {
+      
           return c.json({ msg: "insufficient token ", userID });
         }
 
@@ -151,6 +152,7 @@ gameRouter.get('/startgame', async(c)=>{
         // })
 
         const userinfo = { fullname: user.full_name, token: user.token };
+        c.status(200)
 
         return c.json({ msg: "game page", userinfo, gameid });
         
@@ -162,7 +164,8 @@ gameRouter.get('/startgame', async(c)=>{
 
 })
 
-gameRouter.get('/balance', async(c)=>{
+
+gameRouter.get('/allbalance', async(c)=>{
      const prisma = new PrismaClient({
        datasourceUrl: c.env.DATABASE_URL,
      }).$extends(withAccelerate());
@@ -175,27 +178,13 @@ gameRouter.get('/balance', async(c)=>{
             id: userID
         }
      })
-     const balance = user?.balance
 
-     return c.json({balance})
 
-})
-gameRouter.get('/token_balance', async(c)=>{
-     const prisma = new PrismaClient({
-       datasourceUrl: c.env.DATABASE_URL,
-     }).$extends(withAccelerate());
-
-     const userID = c.get("userID");
-     console.log(userID);
-
-     const user = await prisma.user.findUnique({
-        where:{
-            id: userID
-        }
-     })
+       
+      const balance = user?.balance;
      const tokenbalance = user?.token
 
-     return c.json({tokenbalance})
+     return c.json({tokenbalance,balance})
 
 })
 

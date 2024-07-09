@@ -36,7 +36,7 @@ export default function GameOver() {
           alt=""
           className="object-cover absolute h-full w-full"
         />
-        <div className="z-99 text-white relative h-full w-full grid grid-cols-2">
+        <div className="z-99 text-white relative h-full w-full grid xl:grid-cols-2">
           <div className="flex flex-col justify-center items-center">
             <img src={gameovertitle} alt="" className="w-[500px]" />
 
@@ -72,8 +72,8 @@ export default function GameOver() {
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center max-h-full w-full">
-            <img src={gameover} alt="gameOver" className="max-w-[600px] " />
+          <div className="flex  justify-center items-center max-h-full w-full">
+            <img src={gameover} alt="gameOver" className=" hidden xl:max-w-[600px] xl:block  " />
           </div>
         </div>
       </div>

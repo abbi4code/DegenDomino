@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BackendUrl } from "../config";
 import toast, { Toaster } from "react-hot-toast";
-axios.defaults.withCredentials = true;
+
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -51,7 +51,7 @@ const handleSubmit = async (e : any) => {
       <Meteors number={30} />
 
       <div className="relative h-screen w-full flex justify-center items-center">
-        <div className="w-full bg-transparentrounded-lg shadow border rounded-xl md:mt-0 sm:max-w-md xl:p-0 border-gray-700">
+        <div className="w-full bg-transparentrounded-lg m-0 shadow border rounded-xl md:mt-0 sm:max-w-md xl:p-0 border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
               Create an account

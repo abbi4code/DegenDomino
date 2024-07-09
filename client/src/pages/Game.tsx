@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
-import bg from "../assets/bg.png";
-import basket from "../assets/basket.png";
+import bg from "../assets/gamebg.jpg";
+import basket from "../assets/monkey.png";
+import mango from "../assets/mango.png";
 import apple from "../assets/apple.png";
 import { useSearchParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const sizes = {
   width: window.innerWidth,
@@ -17,6 +19,26 @@ const Game = () => {
   const [points, setPoints] = useState(0);
   const [remainingTime, setRemainingTime] = useState(30);
   const [params] = useSearchParams();
+
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+
+    console.log("width", sizes.width, "height", sizes.height)
+
+    if (sizes.width < 1000 || sizes.height < 500) {
+      setLoader(true)
+      toast.error("Currently this game is only supported on desktops and laptops. Please try again on a desktop or laptop.")
+      
+      setTimeout(() => {
+        navigate("/games");
+      }, 500);
+      return
+    }
+  },[])
+
+
+
 
 
   const gameid = params.get("gameid");
@@ -61,6 +83,7 @@ const Game = () => {
       preload() {
         this.load.image("bg", bg);
         this.load.image("basket", basket);
+        this.load.image("mango", mango);
         this.load.image("apple", apple);
       }
 
@@ -81,7 +104,7 @@ const Game = () => {
         this.player
           .setSize(
             this.player.width - this.player.width / 4,
-            this.player.height / 6
+            this.player.height / 20
           )
           .setOffset(
             this.player.width / 10,
@@ -92,7 +115,9 @@ const Game = () => {
           this.cursor = this.input.keyboard.createCursorKeys();
         }
 
-        this.target = this.physics.add.image(0, 0, "apple");
+        this.target = this.physics.add.image(0, 0, "mango");
+        this.target.setMaxVelocity(100, speedDown);
+        // this.target = this.physics.add.image(0, 0, "apple");
         this.target.setMaxVelocity(100, speedDown);
 
         this.physics.add.overlap(
@@ -225,9 +250,37 @@ const Game = () => {
 
   return (
     <>
-      <main className="flex relative max-h-screen w-full" ref={gameRef}>
-        <canvas id="gameCanvas" className="flex h-full w-full"></canvas>
-      </main>
+      {loader ? (
+        <div className="h-screen flex w-full justify-center items-center"><h1 className="font-bold text-5xl">Loading....</h1> </div>
+      ) : (
+        <main className="flex relative max-h-screen w-full" ref={gameRef}>
+          <canvas id="gameCanvas" className="flex h-full w-full"></canvas>
+        </main>
+      )}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 3000,
+          },
+        }}
+      />
     </>
   );
 };

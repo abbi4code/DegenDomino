@@ -4,13 +4,14 @@ import { BackendUrl } from "../config";
 import {  MutatingDots } from "react-loader-spinner";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 
 export default function StartGame() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [loader, setLoader] = useState(false);
-  const [highestscore, setHighestScore] = useState(0);
+  
 
 const gameid = params.get("gameid");
 
@@ -22,10 +23,20 @@ const gameid = params.get("gameid");
           Authorization: localStorage.getItem("usertoken"),
         },
       });
-      console.log(res.data.highestscore);
+      console.log(res.data);
+
+      if(res.data.msg  === "game page"){
+        navigate(`/game?gameid=${gameid}`);
+        setLoader(false);
+        
+      }else{
+
+        toast.error("Insufficient balance, please top up your account")
+      }
 
       
-      navigate(`/game?gameid=${gameid}`);
+
+      
       setLoader(false);
     } catch (error) {
       console.log(error);
@@ -38,7 +49,7 @@ const gameid = params.get("gameid");
         <img
           src="https://img.freepik.com/free-vector/forest-daytime-scene-with-various-forest-plant-tree_1308-58732.jpg?t=st=1720322179~exp=1720325779~hmac=1b1e6c3106ddef3c98cf004024903329cdf167a98b1339df8d32d54b01cecb82&w=1380"
           alt=""
-          className="object-cover w-full h-full absolute"
+          className=" object-cover w-full h-full absolute bg-no-repeat bg-cover bg-center"
         />
         <div className="flex flex-col relative z-99 h-full w-full top-0 left-0 justify-center items-center">
           {loader ? (
@@ -55,15 +66,15 @@ const gameid = params.get("gameid");
             />
           ) : (
             <>
-              <h1 className="font-bold text-[10rem] text-center text-red-600 text-outline">
+              <h1 className="font-bold text-[6rem] md:text-[8rem] lg-text-[10rem] text-center text-red-600 text-outline">
                 Apple Catcher
               </h1>
-              <div className="mt-5 p-4 rounded-xl border border-black w-max h-max">
-                <h1 className="text-center text-white font-bold text-outline text-4xl">
+              <div className="mt-5 p-2 sm:p-4 rounded-xl border border-black w-max h-max">
+                <h1 className="text-center text-white font-bold text-outline text-xl sm:text-4xl">
                   Welcome to the Apple Challenge!
                 </h1>
                 <div className="flex flex-col justify-center items-center mt-10 ">
-                  <ul className="list-decimal font-bold text-lg">
+                  <ul className="sm:list-decimal font-bold text-sm sm:text-lg">
                     <li>
                       You've got 60 seconds to master the art of apple catching.
                     </li>
@@ -97,6 +108,27 @@ const gameid = params.get("gameid");
           )}
         </div>
       </div>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+          },
+        }}
+      />
     </div>
   );
 }
