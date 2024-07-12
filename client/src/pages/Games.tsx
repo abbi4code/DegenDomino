@@ -177,25 +177,34 @@ function Navbar({
         className={""}
       />
 
-      <Button
+      {/* <Button
         onClick={() => {
           if (!token) {
             navigate("/signin");
           } else {
-            navigate("/leaderboard");
+            navigate("/allgames");
           }
         }}
         text={`Token Balance: ${tokenbalance}`}
-        className={""}
-      />
-      <Button
-        onClick={() => {
-          localStorage.clear();
-          window.location.reload();
-        }}
-        text={`Balance: ${balance}`}
-        className={token ? "" : "hidden"}
-      />
+        className={`${tokenbalance > 20 ? "text-green-500" : "text-red-500"}`}
+      /> */}
+      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[2rem] sm:px-3 sm:py-2 border border-slate-300 text-white rounded-xl ">
+        Token Balance:{" "}
+        <span
+          className={`${tokenbalance > 20 ? "text-green-500" : "text-red-500"}`}
+        >
+          {tokenbalance}
+        </span>
+      </div>
+      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[2rem] sm:px-3 sm:py-2 border border-slate-300 text-white rounded-xl ">
+        Balance:{" "}
+        <span
+          className={`${balance > 20 ? "text-green-500" : "text-red-500"}`}
+        >
+          {balance}
+        </span>
+      </div>
+      
     </div>
   );
 }
