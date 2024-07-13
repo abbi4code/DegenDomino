@@ -67,26 +67,27 @@ const gameid = params.get("gameid");
           ) : (
             <>
               <h1 className="font-bold text-[6rem] md:text-[8rem] lg-text-[10rem] text-center text-red-600 text-outline">
-                Apple Catcher
+                Mango Catcher
               </h1>
-              <div className="mt-5 p-2 sm:p-4 rounded-xl border border-black w-max h-max">
+              <div className="mt-5 p-2 sm:p-4 rounded-xl border border-black w-max h-[17rem] sm:h-[25rem]">
                 <h1 className="text-center text-white font-bold text-outline text-xl sm:text-4xl">
-                  Welcome to the Apple Challenge!
+                  Welcome to the Mango Challenge!
                 </h1>
-                <div className="flex flex-col justify-center items-center mt-10 ">
-                  <ul className="sm:list-decimal font-bold text-sm sm:text-lg">
+                <div className="flex flex-col h-full justify-center items-center ">
+                  <ul className="sm:list-decimal font-bold text-md sm:text-lg">
                     <li>
-                      You've got 60 seconds to master the art of apple catching.
+                      You've got 60 seconds to collect as many mangoes as you
+                      can.
                     </li>
                     <li>
-                      Catch more than 45 apples, and victory will be yours!
+                      Use the arrow keys {" "}
+                      <span className="font-extrabold text-orange-500 text-outline ">
+                        *recommended
+                      </span>{" "}
+                      to move the monkey.
                     </li>
-                    <li>
-                      Fall short of 45, and face the sweet taste of defeat.
-                    </li>
-                    <li>
-                      Click the start button to embark on this fruity adventure!
-                    </li>
+                    <li>You can also use the mouse to move the monkey.</li>
+                    <li>Currently available on desktop only!</li>
                   </ul>
                   <div className="flex w-full justify-around">
                     <button

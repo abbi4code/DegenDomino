@@ -17,7 +17,7 @@ const Game = () => {
   const navigate = useNavigate();
   const gameRef = useRef<HTMLDivElement | null>(null);
   const [points, setPoints] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(30);
+  const [remainingTime, setRemainingTime] = useState(60);
   const [params] = useSearchParams();
 
   const [loader, setLoader] = useState(false);
@@ -74,7 +74,7 @@ const Game = () => {
         this.points = 0;
         this.textTime = {} as Phaser.GameObjects.Text;
         this.timedEvent = {} as Phaser.Time.TimerEvent;
-        this.remainingTime = 30;
+        this.remainingTime = 60;
         this.textScore = {} as Phaser.GameObjects.Text;
         this.isGameOver = false;
         this.navigate = () => {};
@@ -84,7 +84,7 @@ const Game = () => {
         this.load.image("bg", bg);
         this.load.image("basket", basket);
         this.load.image("mango", mango);
-        this.load.image("apple", apple);
+
       }
 
       create() {
@@ -117,7 +117,6 @@ const Game = () => {
 
         this.target = this.physics.add.image(0, 0, "mango");
         this.target.setMaxVelocity(100, speedDown);
-        // this.target = this.physics.add.image(0, 0, "apple");
         this.target.setMaxVelocity(100, speedDown);
 
         this.physics.add.overlap(
@@ -132,7 +131,7 @@ const Game = () => {
           font: "25px Arial",
           color: "#000000",
         });
-        this.textTime = this.add.text(10, 10, "Remaining Time: 00:30", {
+        this.textTime = this.add.text(10, 10, "Remaining Time: 00:60", {
           font: "25px verdana",
           color: "#000000",
         });
@@ -233,13 +232,14 @@ const Game = () => {
       scene: [GameScene],
     };
 
-    // actually this is imp bacuse each time the scene will get buried one over the other
+  
     if (gameRef.current) {
       while (gameRef.current.firstChild) {
         gameRef.current.removeChild(gameRef.current.firstChild);
       }
     }
 
+    //@ts-ignore
     const gameInstance = new Phaser.Game(config);
     gameInstance.scene.start("scene-game", { navigate });
 
@@ -264,7 +264,7 @@ const Game = () => {
         containerClassName=""
         containerStyle={{}}
         toastOptions={{
-          // Define default options
+         
           className: "",
           duration: 5000,
           style: {
@@ -272,7 +272,7 @@ const Game = () => {
             color: "#fff",
           },
 
-          // Default options for specific types
+          
           success: {
             duration: 3000,
           },

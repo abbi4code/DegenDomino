@@ -36,17 +36,17 @@ export default function GameOver() {
           alt=""
           className="object-cover absolute h-full w-full"
         />
-        <div className="z-99 text-white relative h-full w-full grid xl:grid-cols-2">
+        <div className="z-99 text-white/85 relative h-full w-full grid xl:grid-cols-2">
           <div className="flex flex-col justify-center items-center">
             <img src={gameovertitle} alt="" className="w-[500px]" />
 
             <div className="rounded-xl border border-black p-4 font-custom">
               <h1 className="font-bold text-2xl">
-                Your score: <span>{score}</span>
+                Your score: <span className="text-blue-800 text-3xl font-extrabold">{score}</span>
               </h1>
               <h1 className="font-bold text-2xl">
                 
-                Your Highest Score: <span>{HighestScore.highest_score}</span>
+                Your Highest Score: <span className="text-3xl font-extrabold text-red-600">{HighestScore.highest_score}</span>
               </h1>
               {/* <------ i will put highest score of the entire game----> {with name} */}
               {/* <h1 className="font-bold text-2xl">
@@ -54,7 +54,7 @@ export default function GameOver() {
               </h1> */}
               <div className="flex p-5 gap-5">
                 <button
-                  className="font-bold px-3 py-2 border border-black text-outline bg-yellow-400 text-green-600 text-2xl rounded-xl "
+                  className="font-extrabold px-3 py-2  bg-yellow-400 text-green-600 text-2xl rounded-xl "
                   onClick={() => {
                     navigate(`/startgame?gameid=${gameid}`);
                   }}
@@ -62,7 +62,7 @@ export default function GameOver() {
                   Play Again
                 </button>
                 <button
-                  className="font-bold px-3 py-2 border border-black text-outline bg-yellow-400 text-green-600 text-2xl rounded-xl"
+                  className="font-extrabold px-3 py-2 border border-black  bg-yellow-400 text-green-600 text-2xl rounded-xl"
                   onClick={() => {
                     navigate("/leaderboard");
                   }}

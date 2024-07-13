@@ -32,7 +32,7 @@ export default function Leaderboard() {
             </Highlight>
           </motion.h1>
           <div className="min-w-[40rem] h-max border mt-20 p-4 text-white border-white rounded-xl font-bold text-5xl flex justify-center items-center">
-          <h1>Kaam chal rha hai ... ✌️😊</h1>
+          <h1>Coming Soon ... ✌️😊</h1>
           </div>
         </HeroHighlight>
 
