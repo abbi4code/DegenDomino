@@ -4,7 +4,7 @@ import { HeroHighlight, Highlight } from "../components/aceui/herosection";
 import { useNavigate } from "react-router-dom";
 import { TextGenerateEffect } from "../components/aceui/textani";
 import { cn } from "../components/utils/cn";
-import { useState } from "react";
+
 import Button from "../components/Button";
 export default function Home() {
   const navigate = useNavigate();
@@ -31,7 +31,6 @@ export default function Home() {
           <Navbar
             className="mb-4 bg-transparent text-2xl font-bold"
             onClick={handleClick}
-          
           />
           <TextGenerateEffect
             words={"Degen Domino"}

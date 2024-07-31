@@ -1,19 +1,17 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../config";
-import {  MutatingDots } from "react-loader-spinner";
+import { MutatingDots } from "react-loader-spinner";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-
 
 export default function StartGame() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [loader, setLoader] = useState(false);
-  
 
-const gameid = params.get("gameid");
+  const gameid = params.get("gameid");
 
   const handleStartGame = async () => {
     setLoader(true);
@@ -25,29 +23,24 @@ const gameid = params.get("gameid");
       });
       console.log(res.data);
 
-      if(res.data.msg  === "game page"){
+      if (res.data.msg === "game page") {
         navigate(`/game?gameid=${gameid}`);
         setLoader(false);
-        
-      }else{
-
-        toast.error("Insufficient balance, please top up your account")
+      } else {
+        toast.error("Insufficient balance, please top up your account");
       }
 
-      
-
-      
       setLoader(false);
     } catch (error) {
       console.log(error);
-    } 
+    }
   };
-  
+
   return (
     <div id="gameStartDivv" className="h-screen w-full flex">
       <div className="h-full w-full relative">
         <img
-          src="https://img.freepik.com/free-vector/forest-daytime-scene-with-various-forest-plant-tree_1308-58732.jpg?t=st=1720322179~exp=1720325779~hmac=1b1e6c3106ddef3c98cf004024903329cdf167a98b1339df8d32d54b01cecb82&w=1380"
+          src="https://res.cloudinary.com/dn4w4noy2/image/upload/v1721161902/startgame_qb46nl.jpg"
           alt=""
           className=" object-cover w-full h-full absolute bg-no-repeat bg-cover bg-center"
         />
@@ -80,7 +73,7 @@ const gameid = params.get("gameid");
                       can.
                     </li>
                     <li>
-                      Use the arrow keys {" "}
+                      Use the arrow keys{" "}
                       <span className="font-extrabold text-orange-500 text-outline ">
                         *recommended
                       </span>{" "}

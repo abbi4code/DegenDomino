@@ -8,51 +8,44 @@ import { useEffect, useState } from "react";
 import { cn } from "../components/utils/cn";
 import Button from "../components/Button";
 
-interface gameprops{
-  title: string,
-  description: string,
-  createdAt?: Date,
-  id: string,
-  tokenreq?: integer
- 
+interface gameprops {
+  title: string;
+  description: string;
+  createdAt?: Date;
+  id: string;
+  tokenreq?: integer;
 }
 
 export default function Games() {
   const navigate = useNavigate();
   const [games, setGames] = useState([]);
-  const [loader,setloader] = useState(false)
-
-
+  const [loader, setloader] = useState(false);
 
   useEffect(() => {
     const getAllgames = async () => {
-      setloader(true)
+      setloader(true);
       const token = localStorage.getItem("usertoken");
       const res = await axios.get(`${BackendUrl}/game/allgames`, {
         headers: {
           Authorization: token,
         },
       });
-      setGames(res.data.game)
-      setloader(false)
+      setGames(res.data.game);
+      setloader(false);
       console.log("hi there from here", res.data.game);
       console.log("games for gun", games);
     };
     getAllgames();
-
-
   }, []);
 
-  const handleClick = async(id:any) => {
+  const handleClick = async (id: any) => {
     const gameid = id;
     const res = await axios.get(`${BackendUrl}/game/allgames`, {
       headers: {
         Authorization: localStorage.getItem("usertoken"),
       },
-    
-    })
-    console.log(res.data)
-
+    });
+    console.log(res.data);
 
     navigate(`/startgame?gameid=${gameid}`);
   };
@@ -64,10 +57,7 @@ export default function Games() {
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
         <div className="h-full w-full text-white relative">
           <div className="flex justify-center flex-col items-center h-full w-full">
-            <Navbar
-              className="mb-4 w-max bg-transparent text-2xl font-bold z-99999 "
-             
-            />
+            <Navbar className="mb-4 w-max bg-transparent text-2xl font-bold z-99999 " />
             <TextGenerateEffect
               words={"All games available for now"}
               className="mt-32 font-extrabold text-4xl md:text-6xl text-center"
@@ -134,33 +124,25 @@ export function Image({ src, className, alt }: imgaeprops) {
   return <img src={src} alt={alt} className={className} />;
 }
 
-function Navbar({
-  className,
-}: {
-  className?: string;
-}) {
+function Navbar({ className }: { className?: string }) {
   const token = localStorage.getItem("usertoken");
   const navigate = useNavigate();
-  const [balance, setBalance] = useState(0)
-  const [tokenbalance, setTokenbalance] = useState(0)
+  const [balance, setBalance] = useState(0);
+  const [tokenbalance, setTokenbalance] = useState(0);
 
   useEffect(() => {
     async function balances() {
       const res = await axios.get(`${BackendUrl}/game/allbalance`, {
-      headers:{
-        Authorization: token
-      }
-    })
-    setBalance(res.data.balance)
-    setTokenbalance(res.data.tokenbalance)
-    console.log(res.data)
-  }
-  balances()
-
-
-  },[])
-
- 
+        headers: {
+          Authorization: token,
+        },
+      });
+      setBalance(res.data.balance);
+      setTokenbalance(res.data.tokenbalance);
+      console.log(res.data);
+    }
+    balances();
+  }, []);
 
   return (
     <div
@@ -198,13 +180,10 @@ function Navbar({
       </div>
       <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[2rem] sm:px-3 sm:py-2 border border-slate-300 text-white rounded-xl ">
         Balance:{" "}
-        <span
-          className={`${balance > 20 ? "text-green-500" : "text-red-500"}`}
-        >
+        <span className={`${balance > 20 ? "text-green-500" : "text-red-500"}`}>
           {balance}
         </span>
       </div>
-      
     </div>
   );
 }

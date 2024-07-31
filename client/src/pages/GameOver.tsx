@@ -1,5 +1,5 @@
-import gameovertitle from "../assets/gameovertitle.png"
-import gameover from "../assets/gameover.png"
+import gameovertitle from "../assets/gameovertitle.png";
+import gameover from "../assets/gameover.png";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -7,32 +7,34 @@ import axios from "axios";
 import { BackendUrl } from "../config";
 
 export default function GameOver() {
-    const navigate = useNavigate()
-    const [params] = useSearchParams()
-    const [HighestScore, setHighestScore] = useState({highest_score: ""})
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const [HighestScore, setHighestScore] = useState({ highest_score: "" });
 
-    const score = params.get("score")
-    const gameid = params.get("gameid")
+  const score = params.get("score");
+  const gameid = params.get("gameid");
 
-    useEffect(() => {
-        const sendScore = async () => {
-            const res = await axios.get(`${BackendUrl}/game/gameover?gameid=${gameid}&score=${score}`, {
-                headers: {
-                    Authorization: localStorage.getItem("usertoken")
-                }
-            })
-            setHighestScore(res.data.highest_score)
-            console.log(res.data.highest_score)
+  useEffect(() => {
+    const sendScore = async () => {
+      const res = await axios.get(
+        `${BackendUrl}/game/gameover?gameid=${gameid}&score=${score}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("usertoken"),
+          },
         }
-        sendScore()
-    }, [])
-
+      );
+      setHighestScore(res.data.highest_score);
+      console.log(res.data.highest_score);
+    };
+    sendScore();
+  }, []);
 
   return (
     <div className="h-screen w-full">
       <div className="h-full w-full relative">
         <img
-          src="https://img.freepik.com/free-vector/detailed-jungle-background_52683-62631.jpg?t=st=1720325720~exp=1720329320~hmac=9334c9362271ee0c9ac73d5faa3b88ec22389fe5618bba55a4905b463ddd34b7&w=1060"
+          src="https://res.cloudinary.com/dn4w4noy2/image/upload/v1721161897/gameoverbg_uziife.jpg"
           alt=""
           className="object-cover absolute h-full w-full"
         />
@@ -42,11 +44,16 @@ export default function GameOver() {
 
             <div className="rounded-xl border border-black p-4 font-custom">
               <h1 className="font-bold text-2xl">
-                Your score: <span className="text-blue-800 text-3xl font-extrabold">{score}</span>
+                Your score:{" "}
+                <span className="text-blue-800 text-3xl font-extrabold">
+                  {score}
+                </span>
               </h1>
               <h1 className="font-bold text-2xl">
-                
-                Your Highest Score: <span className="text-3xl font-extrabold text-red-600">{HighestScore.highest_score}</span>
+                Your Highest Score:{" "}
+                <span className="text-3xl font-extrabold text-red-600">
+                  {HighestScore.highest_score}
+                </span>
               </h1>
               {/* <------ i will put highest score of the entire game----> {with name} */}
               {/* <h1 className="font-bold text-2xl">
@@ -73,7 +80,11 @@ export default function GameOver() {
             </div>
           </div>
           <div className="flex  justify-center items-center max-h-full w-full">
-            <img src={gameover} alt="gameOver" className=" hidden xl:max-w-[600px] xl:block  " />
+            <img
+              src={gameover}
+              alt="gameOver"
+              className=" hidden xl:max-w-[600px] xl:block  "
+            />
           </div>
         </div>
       </div>

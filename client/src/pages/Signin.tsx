@@ -1,50 +1,44 @@
-
-import { useState } from 'react';
-import Meteors from '../components/ui/bg';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BackendUrl } from '../config';
-import toast, { Toaster } from 'react-hot-toast';
+import { useState } from "react";
+import Meteors from "../components/ui/bg";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BackendUrl } from "../config";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Signin() {
-    const navigate = useNavigate()
-    const [signIninputs, setsignIninputs] = useState({email:"", password:""})
+  const navigate = useNavigate();
+  const [signIninputs, setsignIninputs] = useState({ email: "", password: "" });
 
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${BackendUrl}/auth/signin`, {
+        email: signIninputs.email,
+        password: signIninputs.password,
+      });
+      console.log(res);
+      const token = res.data.token;
+      localStorage.setItem("usertoken", token);
 
-    const handleSubmit = async (e: any) => {
-      e.preventDefault();
-      try {
-        const res = await axios.post(`${BackendUrl}/auth/signin`, {
-          email: signIninputs.email,
-          password: signIninputs.password,
-        });
-        console.log(res);
-        const token = res.data.token;
-        localStorage.setItem("usertoken", token);
-
-        if (res.status === 200) {
-          toast.success("User signin successfully");
-          setTimeout(() => {
-            navigate("/");
-          }, 500);
-        }
-        
-      } catch (error) {
-        //@ts-ignore
-        if (error.response.status === 401) {
-         
-           toast.error("User dont exists");
-        }else if(error.response.status === 400){
-          toast.error("Invalid credentials");
-        }
-        else {
-          toast.error("something went wrong");
-        }
-         
-         console.error(error);
-        
+      if (res.status === 200) {
+        toast.success("User signin successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       }
-    };
+    } catch (error: any) {
+      //@ts-ignore
+      if (error.response.status === 401) {
+        toast.error("User dont exists");
+      } else if (error.response.status === 400) {
+        toast.error("Invalid credentials");
+      } else {
+        toast.error("something went wrong");
+      }
+
+      console.error(error);
+    }
+  };
   return (
     <div className="relative flex items-center justify-center h-screen bg-black p-20 overflow-hidden">
       <Meteors number={30} />

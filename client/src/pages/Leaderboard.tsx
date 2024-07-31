@@ -1,7 +1,7 @@
 
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from '../components/aceui/herosection';
-import { BorderBeam } from '../components/ui/movborder';
+
 
 export default function Leaderboard() {
   return (
@@ -36,14 +36,7 @@ export default function Leaderboard() {
           </div>
         </HeroHighlight>
 
-        {/* NOT including it for now creating css bugs */}
-        {/* <div className="w-max h-max  text-white absolute overflow-hidden top-[20%] ">
-          <div className="min-w-[80rem] h-[40rem]">
-            hi there
-            <div>hi there one agains</div>
-          </div>
-          <BorderBeam size={250} duration={12} delay={9} />
-        </div> */}
+  
       </div>
     </div>
   );

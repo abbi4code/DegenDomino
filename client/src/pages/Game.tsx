@@ -4,7 +4,6 @@ import Phaser from "phaser";
 import bg from "../assets/gamebg.jpg";
 import basket from "../assets/monkey.png";
 import mango from "../assets/mango.png";
-import apple from "../assets/apple.png";
 import { useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -19,30 +18,27 @@ const Game = () => {
   const [points, setPoints] = useState(0);
   const [remainingTime, setRemainingTime] = useState(60);
   const [params] = useSearchParams();
+  console.log(points, remainingTime);
 
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-
-    console.log("width", sizes.width, "height", sizes.height)
+    console.log("width", sizes.width, "height", sizes.height);
 
     if (sizes.width < 1000 || sizes.height < 500) {
-      setLoader(true)
-      toast.error("Currently this game is only supported on desktops and laptops. Please try again on a desktop or laptop.")
-      
+      setLoader(true);
+      toast.error(
+        "Currently this game is only supported on desktops and laptops. Please try again on a desktop or laptop."
+      );
+
       setTimeout(() => {
         navigate("/games");
       }, 500);
-      return
+      return;
     }
-  },[])
-
-
-
-
+  }, []);
 
   const gameid = params.get("gameid");
-
 
   useEffect(() => {
     const speedDown = 800;
@@ -84,7 +80,6 @@ const Game = () => {
         this.load.image("bg", bg);
         this.load.image("basket", basket);
         this.load.image("mango", mango);
-
       }
 
       create() {
@@ -211,7 +206,6 @@ const Game = () => {
       }
 
       gameOver() {
-
         this.navigate(`/gameover?gameid=${gameid}&score=${this.points}`);
         this.isGameOver = true;
         this.scene.stop();
@@ -232,7 +226,6 @@ const Game = () => {
       scene: [GameScene],
     };
 
-  
     if (gameRef.current) {
       while (gameRef.current.firstChild) {
         gameRef.current.removeChild(gameRef.current.firstChild);
@@ -251,7 +244,9 @@ const Game = () => {
   return (
     <>
       {loader ? (
-        <div className="h-screen flex w-full justify-center items-center"><h1 className="font-bold text-5xl">Loading....</h1> </div>
+        <div className="h-screen flex w-full justify-center items-center">
+          <h1 className="font-bold text-5xl">Loading....</h1>{" "}
+        </div>
       ) : (
         <main className="flex relative max-h-screen w-full" ref={gameRef}>
           <canvas id="gameCanvas" className="flex h-full w-full"></canvas>
@@ -264,7 +259,6 @@ const Game = () => {
         containerClassName=""
         containerStyle={{}}
         toastOptions={{
-         
           className: "",
           duration: 5000,
           style: {
@@ -272,7 +266,6 @@ const Game = () => {
             color: "#fff",
           },
 
-          
           success: {
             duration: 3000,
           },

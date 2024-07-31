@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Meteors from "../components/ui/bg";
 import { useNavigate } from "react-router-dom";
@@ -6,45 +5,39 @@ import axios from "axios";
 import { BackendUrl } from "../config";
 import toast, { Toaster } from "react-hot-toast";
 
-
 const Signup = () => {
-  const navigate = useNavigate()
-  const [inputs, setinputs] = useState({email: "", full_name:"", password:""})
-const handleSubmit = async (e : any) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post(
-      `${BackendUrl}/auth/signup`,
-      {
+  const navigate = useNavigate();
+  const [inputs, setinputs] = useState({
+    email: "",
+    full_name: "",
+    password: "",
+  });
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${BackendUrl}/auth/signup`, {
         email: inputs.email,
         password: inputs.password,
         full_name: inputs.full_name,
+      });
+      console.log(res);
+      const token = res.data.token;
+      localStorage.setItem("usertoken", token);
+      if (res.status === 200) {
+        toast.success("User created successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       }
-    );
-    console.log(res);
-     const token = res.data.token;
-     localStorage.setItem("usertoken", token);
-    if (res.status === 200) {
-
-      toast.success("User created successfully");
-      setTimeout(() => {
-        
-        navigate('/')
-        
-      }, 500);
-      
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        toast.error("User already exists");
+      } else {
+        toast.error("user already exists");
+      }
+      console.error(error);
     }
-  } catch (error) {
-    if(error.response.status === 401){
-      toast.error("User already exists");
-    }  else{
-
-      toast.error("user already exists");
-    }  
-    console.error(error);
-    
-  }
-};
+  };
 
   return (
     <div className="relative flex items-center justify-center h-screen bg-black p-20 overflow-hidden">

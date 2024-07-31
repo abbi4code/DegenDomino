@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import z from "zod"
-import { hashpassword } from "../bcrypt/hashing";
+import { hashpassword, validpassword } from "../bcrypt/hashing";
 import { decode, sign, verify } from "hono/jwt";
 import {
   getCookie,
@@ -32,17 +32,53 @@ const signinInputs = z.object({
   password: z.string().min(5, { message: "password should be of 5 or characters" }),
 
 });
+authRouter.post("/test", async (c) => {
+  const body = await c.req.json();
+  const username = body.username;
+  const password = body.password;
+  const dburi = c.env.DATABASE_URL;
+  const jwtsecret = c.env.JWT_SECRET;
+
+  try {
+    const prisma = new PrismaClient({
+        datasources: {db:{url: c.env.DATABASE_URL}},
+        //@ts-ignore
+        engine: {
+            type: "library"
+        },
+    }).$extends(withAccelerate())
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email: username
+        }
+    })
+
+    if(!user){
+        return c.json({msg: "user not found"})
+    }
+    return c.json({user,dburi, jwtsecret });
+    
+  } catch (error) {
+    console.log(error)
+    return c.json({error,msg: "error in testss"
+    })
+    
+  }
+
+  }),
+
+
 
 authRouter.post('/signup', async(c)=>{
 
     const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
+        datasources: {db: {url: c.env.DATABASE_URL}}
     }).$extends(withAccelerate())
 
-    
-
+    const body = await c.req.json()
     try {
-        const body = await c.req.json()
+        console.log(body)
         const validuser = signupInputs.safeParse(body)
         if(!validuser.success){
             const msg = validuser.error.errors.map((err) => err.message)
@@ -71,21 +107,11 @@ authRouter.post('/signup', async(c)=>{
        //@ts-ignore
         const token = await sign(user.id , c.env.JWT_SECRET)
         console.log(user)
-
-        setCookie(c, "token", token, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "None",
-          maxAge: 9999999,
-        });
         c.status(200)
+         console.log(c.env.DATABASE_URL);
+         console.log(c.env.JWT_SECRET);
 
         return c.json({msg: "user succesfully signup", token})
-
-
-        
-
-
         
     } catch (error) {
         console.log(error)
@@ -116,14 +142,20 @@ authRouter.post('/signin', async(c)=>{
             return c.json({msg})
         }
 
+        
         const existuser = await prisma.user.findUnique({
             where:{
-                email: body.email
+                email: body.email,
             }
         })
-        if(!existuser){
+
+        //@ts-ignore
+        const validpass = await validpassword(body.password, existuser?.password) 
+        console.log(validpass)
+        
+        if(!existuser || !validpass){
             c.status(401)
-            return c.json({msg: "user dont exist"})
+            return c.json({msg: "Invalid Credentials"})
         }
          //@ts-ignore
         const token = await sign(existuser.id, c.env.JWT_SECRET)
