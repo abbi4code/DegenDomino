@@ -2,8 +2,8 @@ name = "server"
 compatibility_date = "2023-12-01"
 
 [vars]
-DATABASE_URL="postgresql://neondb_owner:dp0v8jKNkEFL@ep-jolly-tooth-a1dvud4d.ap-southeast-1.aws.neon.tech/degendomino?sslmode=require"
-JWT_SECRET="abhishek"
+DATABASE_URL=""
+JWT_SECRET=""
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
