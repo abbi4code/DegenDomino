@@ -4,6 +4,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import z from "zod"
 import { hashpassword, validpassword } from "../bcrypt/hashing";
 import { decode, sign, verify } from "hono/jwt";
+// import { rateLimiter } from "hono-rate-limiter";
 import {
   getCookie,
   getSignedCookie,
@@ -12,6 +13,18 @@ import {
   deleteCookie,
 } from "hono/cookie";
 
+// const authlimiter = rateLimiter({
+//   windowMs: 5 * 1000, 
+//   limit: 10, 
+//   standardHeaders: "draft-6",
+//   keyGenerator: (c) => "<unique_key>", 
+//   message: {
+//     msg: "Too much Request, Please try again after 5min"
+//   }
+// });
+
+// Apply the rate limiting middleware to all requests.
+// app.use(limiter);
 export const authRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -70,7 +83,7 @@ authRouter.post("/test", async (c) => {
 
 
 
-authRouter.post('/signup', async(c)=>{
+authRouter.post('/signup',async(c)=>{
 
     const prisma = new PrismaClient({
         datasources: {db: {url: c.env.DATABASE_URL}}
@@ -125,7 +138,7 @@ authRouter.post('/signup', async(c)=>{
 })
 
 
-authRouter.post('/signin', async(c)=>{
+authRouter.post('/signin',async(c)=>{
 
 
     const prisma = new PrismaClient({

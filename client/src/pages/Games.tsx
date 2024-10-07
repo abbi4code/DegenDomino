@@ -60,7 +60,7 @@ export default function Games() {
             <Navbar className="mb-4 w-max bg-transparent text-2xl font-bold z-99999 " />
             <TextGenerateEffect
               words={"All games available for now"}
-              className="mt-32 font-extrabold text-4xl md:text-6xl text-center"
+              className="mt-32 font-extrabold text-[1.5rem] md:text-6xl text-center"
             />
             {loader ? (
               <div className="flex justify-center font-bold text-6xl items-center h-screen w-full">
@@ -76,7 +76,7 @@ export default function Games() {
                   >
                     {/* <-------for now only apple game added------> {maybe later i will add more} */}
                     <CardBody
-                      className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-[25rem] sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  "
+                      className="relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] bg-black border-white/[0.2] w-[20rem] sm:w-[30rem] h-auto rounded-xl p-6 border cursor-pointer  "
                       //@ts-ignore
                       onClick={() => handleClick(game.id)}
                     >
@@ -96,7 +96,7 @@ export default function Games() {
                       <CardItem translateZ="100" className="w-full mt-1">
                         <Image
                           src={applebg}
-                          className="h-100 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+                          className="h-auto sm:h-100  w-full object-cover rounded-xl group-hover/card:shadow-xl"
                           alt="thumbnail"
                         />
                       </CardItem>
@@ -147,7 +147,7 @@ function Navbar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "fixed top-10 w-max bg-transparent inset-x-0 max-w-2xl mx-auto z-50 flex gap-3 border rounded-xl p-3 justify-center items-center border-white",
+        "fixed top-10 w-max bg-transparent inset-x-0 max-w-2xl mx-auto z-50 flex gap-3 border rounded-full px-3 py-1 sm:py-2 justify-center items-center border-white",
         className
       )}
     >
@@ -156,7 +156,7 @@ function Navbar({ className }: { className?: string }) {
           navigate("/");
         }}
         text={`Home`}
-        className={""}
+        className="border-none text-xl"
       />
 
       {/* <Button
@@ -170,7 +170,7 @@ function Navbar({ className }: { className?: string }) {
         text={`Token Balance: ${tokenbalance}`}
         className={`${tokenbalance > 20 ? "text-green-500" : "text-red-500"}`}
       /> */}
-      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[2rem] sm:px-3 sm:py-2 border border-slate-300 text-white rounded-xl ">
+      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[1.5rem] sm:px-3 sm:py-2  text-white rounded-xl ">
         Token Balance:{" "}
         <span
           className={`${tokenbalance > 20 ? "text-green-500" : "text-red-500"}`}
@@ -178,7 +178,7 @@ function Navbar({ className }: { className?: string }) {
           {tokenbalance}
         </span>
       </div>
-      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[2rem] sm:px-3 sm:py-2 border border-slate-300 text-white rounded-xl ">
+      <div className="bg-transparent px-1 py-1 text-[1rem] sm:text-[1.5rem] sm:px-3 sm:py-2 text-white rounded-xl ">
         Balance:{" "}
         <span className={`${balance > 20 ? "text-green-500" : "text-red-500"}`}>
           {balance}
